@@ -1,0 +1,207 @@
+.wrap nav .container 
+{
+   width: 100%;
+}
+.container .site-index .body-content .index .form-group, 
+.wrap .container .pulsar-ftp-file-form, .erp-user-form, .erp-role-form, .pulsar-customer-quotation-answer-form
+{
+	max-width: 50%;
+	margin-left: 25%;
+}
+.erp-container
+{
+	width: 100%;
+	padding-right: 30px;
+	padding-left: 0px;
+}
+.erp-container-100-inline
+{
+	width: 100%;
+	display: inline-block;
+}
+.erp-container-30-inline
+{
+	width: 30%;
+	min-width: 230px;
+	float: left;
+	padding-left: 10px;
+}
+.erp-container-15-inline
+{
+	width: 15%;
+	min-width: 120px;
+	padding-left: 10px;
+	float: left;
+}
+.erp-container-10-inline
+{
+	width: 10%;
+	min-width: 80px;
+	padding-left: 10px;
+	float: left;
+}
+.kv-panel-pager {	
+    text-align: center;
+}
+.form-group-code, .form-group-code-add, form-container-group-code
+{
+	display: inline-block;
+	width: 100%;
+}
+.group-field
+{	
+	float:left;
+	width: 80%;
+}
+.group-add, .group-remove
+{
+	float: right;
+	width: 10%;
+	padding: 26px 0px 10px;
+    text-align: right;
+}
+.form-group-code-add, form-container-group-code
+{
+	display: none;
+}
+.form-container-date
+{
+	float:left;
+	width: 60%;
+}
+.form-container-validate
+{
+	padding-left: 10px;
+	float: left;
+	width: 40%;
+}
+.form-Container-group-dropdown, .form-container-project-type, .form-container-usage-type, .form-container-format-type, 
+.form-container-distribution-type, .form-container-periodicity-type, .form-container-size-type, .form-cantainer-project-Tittle, .form-container-code-file-error
+{
+	margin-bottom: 15px;
+}
+.form-container-code-file-error
+{
+	display: none;
+}
+#code-file-error
+{
+	border: 1px solid red;
+	color: red;
+}
+.erp-role-container
+{
+	margin-top: -5px;
+}
+.erp-role-main-menu, .erp-container-filter
+{
+	border: 1px solid #337ab7;
+	border-bottom: 1px solid #337ab7;
+	min-width: 25%;
+	max-width: 100%;	
+	border-radius: 6px 6px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+.erp-table-head
+{
+	padding: 5px;
+	background-color: #337ab7;
+    border-color: #337ab7;
+    color: #fff;
+    border-radius: 4px 4px 0px 0px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+} 
+.erp-role-no-submenu
+{
+	text-align: center;
+	margin-bottom: 15px;
+}
+.erp-role-submenu
+{
+	padding-left: 15px;
+	padding-top: 10px;
+	display: inline-block;
+}
+.erp-roloe-submenu-container
+{
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+#search-label
+{
+	margin-top: 25px;
+}
+#erp-container-checkbox-filter-no-label
+{
+	font-size: 14px;
+    font-weight: normal;
+    margin-top: 30px;
+}
+#form-group-code-project-type, #form-group-code-utilization, #form-group-code-format, #form-group-code-distribution, #form-group-code-periodicity, #form-group-code-description
+{
+	display: none;
+}
+.kv-panel-before-custon
+{
+	padding: 10px;
+}
+.kv-panel-before-custon .pull-right .btn-toolbar  .btn-group
+{
+	padding: 1px;
+}
+.table-responsive-header
+{	
+	border-bottom: 1px solid #999;
+	border-top: 1px solid #999;
+	padding: 5px;
+	background-color: #f5f5f5;
+}
+.table-responsive-header .form-group, .table-responsive-column .form-group
+{
+	display: inline;
+}
+.table-responsive-column
+{
+	width: 23%;
+	display: inline-table;
+	padding-left: 35px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	font-size: 12px;
+}
+.expand-button
+{
+	border: 1px solid #fff;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	border-radius: 4px;
+	margin-left: 20px;
+	margin-top: 1px;
+	
+}
+.symbol-expand
+{
+	vertical-align: middle;
+	margin-top: -2.5px;
+}
+#symbol-expand-minus
+{
+	margin-left: 6px;
+}
+#symbol-expand-max
+{
+	margin-left: 5px;
+}
+.table-responsive kv-grid-container custon .wrap .container
+{
+	padding-left: 0px;
+}
+#table-responsive-container-menu-0, #table-responsive-container-menu-1, #table-responsive-container-menu-2, #table-responsive-container-menu-3,
+#table-responsive-container-menu-4, #table-responsive-container-menu-5, #table-responsive-container-menu-6, #table-responsive-container-menu-7,
+#table-responsive-container-menu-8, #table-responsive-container-menu-9, #table-responsive-container-menu-10, #table-responsive-container-menu-11
+{
+	display: none;
+}
