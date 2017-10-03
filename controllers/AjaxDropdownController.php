@@ -17,8 +17,6 @@ class AjaxDropdownController extends Controller
 {
 	public function actionGetProjectType()
 	{
-		echo 'teste'; exit;
-		
 		$objErpProjectType = new ErpProjectType();
 		if(!Yii::$app->request->post('booIsPicture'))
 			$strFieldFor = 'BOO_FOR_VIDEO';
