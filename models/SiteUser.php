@@ -118,7 +118,7 @@ class SiteUser extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SiteSpecialUserTitle::className(), ['INT_FK_SITE_USER_ID' => 'INT_PK_ID_SITE_USER']);
     }
-    public function getIntFkErpCity()
+    public function getErpCity()
     {
         return $this->hasOne(ErpCity::className(), ['INT_PK_ID_ERP_CITY' => 'INT_FK_ERP_CITY_ID']);
     }
@@ -126,23 +126,23 @@ class SiteUser extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ErpCompany::className(), ['INT_PK_ID_ERP_COMPANY' => 'INT_FK_ERP_COMPANY_ID']);
     }
-    public function getIntFkErpCustomer()
+    public function getErpCustomer()
     {
         return $this->hasOne(ErpCustomer::className(), ['INT_PK_ID_ERP_CUSTOMER' => 'INT_FK_ERP_CUSTOMER_ID']);
     }
-    public function getIntFkSiteUserDownloadPermission()
+    public function getSiteUserDownloadPermission()
     {
         return $this->hasOne(SiteUserDownloadPermission::className(), ['INT_PK_ID_SITE_USER_DOWNLOAD_PERMISSION' => 'INT_FK_SITE_USER_DOWNLOAD_PERMISSION_ID']);
     }
-    public function getIntFkSiteUserLanguage()
+    public function getSiteUserLanguage()
     {
         return $this->hasOne(SiteUserLanguage::className(), ['INT_PK_ID_SITE_USER_LANGUAGE' => 'INT_FK_SITE_USER_LANGUAGE_ID']);
     }
-    public function getIntFkSiteUserType()
+    public function getSiteUserType()
     {
         return $this->hasOne(SiteUserType::className(), ['INT_PK_ID_TYPE_USER' => 'INT_FK_SITE_TYPE_USER_ID']);
     }
-    public function getIntFkSiteUserTypeNewsletter()
+    public function getSiteUserTypeNewsletter()
     {
         return $this->hasOne(SiteUserTypeNewsletter::className(), ['INT_PK_ID_SITE_USER_TYPE_NEWSLETTER' => 'INT_FK_SITE_USER_TYPE_NEWSLETTER_ID']);
     }
@@ -158,5 +158,6 @@ class SiteUser extends \yii\db\ActiveRecord
     {
     	return $this->hasOne(SiteSpecialUserPrefix::className(), ['INT_PK_ID_SITE_SPECIAL_USER_PREFIX' => 'INT_FK_SITE_SPECIAL_USER_PREFIX_ID']);
     }
+
     
 }

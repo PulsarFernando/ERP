@@ -1,6 +1,7 @@
 <?php
 namespace app\models;
 use Yii;
+use yii\helpers\ArrayHelper;
 class ErpTypeFile extends \yii\db\ActiveRecord
 {
     public static function tableName()
@@ -32,5 +33,13 @@ class ErpTypeFile extends \yii\db\ActiveRecord
     public function getSiteFile()
     {
         return $this->hasMany(SiteFile::className(), ['INT_FK_ERP_TYPE_FILE_ID' => 'INT_PK_ID_ERP_TYPE_FILE']);
+    }
+    public function getAllTypeFile()
+    {
+    	return ArrayHelper::map(
+    			ErpTypeFile::find()->asArray()->all(),
+    			'INT_PK_ID_ERP_TYPE_FILE',
+    			'STR_FILE_TYPE_NAME'
+    			);
     }
 }

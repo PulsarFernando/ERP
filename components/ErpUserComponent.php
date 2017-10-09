@@ -6,7 +6,6 @@ class ErpUserComponent extends Component
 {
 	public function startSession($objLogin)
 	{
-		
 		Yii::$app->session->open();
 		Yii::$app->session->set('strIdErpUser', $objLogin->INT_PK_ID_ERP_USER);
 		Yii::$app->session->set('intErpRole', $objLogin->INT_FK_ERP_ROLE_ID);	

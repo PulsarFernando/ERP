@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
         		],
         		'filterInputOptions'=>['placeholder'=>'login'],
         	],
-            
         	[
         		'attribute'=>'STR_NAME',
         		'format' => 'raw',
@@ -101,21 +100,21 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
         'hover'=>true,
         'panel' =>
         [
-        		'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Cadastros'.'</h3>',
-        		'type'=>'primary',
+        	'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Cadastros'.'</h3>',
+        	'type'=>'primary',
         ],
         'toolbar'=>
         [
-        		[
-        			'content'=>
-        			html::a(Html::button('<i class="glyphicon glyphicon-plus"></i> '.'Adicionar cadastro', ['type'=>'button', 'title'=>'Adicionar cadastro', 'class'=>'btn btn-success']),['/site/site-user-add'])
-        		],
-        		[
-        			'content'=>
-        			Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['site/user'], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Atualizar'])
-        		],
-        		'{export}',
-        		'{toggleData}',
+        	[
+        		'content'=>
+        		html::a(Html::button('<i class="glyphicon glyphicon-plus"></i> '.'Adicionar cadastro', ['type'=>'button', 'title'=>'Adicionar cadastro', 'class'=>'btn btn-success']),['/site/site-user-add'])
+        	],
+        	[
+        		'content'=>
+        		Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['site/user'], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Atualizar'])
+        	],
+        	'{export}',
+        	'{toggleData}',
         ],
         'striped'=>false,
     ]); ?>

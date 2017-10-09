@@ -17,7 +17,7 @@ use app\models\ErpState;
 use app\models\ErpCity;
 use app\models\SiteQuoteSentSearch;
 use app\models\SiteQuoteSent;
-use app\models\SiteDownloadSearch;
+use app\components\SystemComponent;
 class SiteController extends Controller
 {
     public function actionFtp()
@@ -321,15 +321,34 @@ class SiteController extends Controller
     }
     public function actionDownloadReport()
     {
-    	$objSearchModelActualMonth = new SiteDownloadSearch();
-    	$objSearchModelLastMonth = new SiteDownloadSearch();
-    	$objDataProviderActualMonth = $objSearchModelActualMonth->search(Yii::$app->request->queryParams, '2017-02');
-    	$objDataProviderLastMonth = $objSearchModelLastMonth->search(Yii::$app->request->queryParams, '2017-01');
-    	return $this->render('downloadShowDownloadReport', [
-    			'objSearchModelActualMonth' => $objSearchModelActualMonth,
-    			'objSearchModelLastMonth' => $objSearchModelLastMonth,
-    			'objDataProviderActualMonth' => $objDataProviderActualMonth,
-    			'objDataProviderLastMonth' => $objDataProviderLastMonth
-    	]);
+    	$objSiteUserSearch = new SiteUserSearch();
+    	if(Yii::$app->request->get())
+    	{
+    		$objDataProviderLastMonth = false;
+    		$datDateStart = SystemComponent::getDateForDb(Yii::$app->request->get('datFrom'));
+     		$datDateFinish = SystemComponent::getDateForDb(Yii::$app->request->get('datTo'));
+     	}
+    	else 
+    	{
+    		$objDataProviderLastMonth = true;
+    		$datDateStart = date('Y-m').'-01';
+    		$datDateFinish = date('Y-m').'-31';
+    		$datDateStartLastMonth = date('Y-m', strtotime('-1 months', strtotime(date('Y-m')))).'-01';
+    		$datDateFinishLastMonth = date('Y-m', strtotime('-1 months', strtotime(date('Y-m')))).'-31';
+    	}
+    	Yii::$app->session->set('datDateStart', $datDateStart);
+    	Yii::$app->session->set('datDateFinish', $datDateFinish);
+    	Yii::$app->session->set('datDateStartLastMonth', $datDateStartLastMonth);
+    	Yii::$app->session->set('datDateFinishLastMonth', $datDateFinishLastMonth);
+    	$objDataProviderThisMonth = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'));
+    	if($objDataProviderLastMonth)
+    		$objDataProviderLastMonth = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStartLastMonth'),Yii::$app->session->get('datDateFinishLastMonth'));
+    	return $this->render('downloadReport',
+    		[
+    			'objSiteUserSearch' => $objSiteUserSearch,
+    			'objDataProviderThisMonth' => $objDataProviderThisMonth,
+    			'objDataProviderLastMonth' => $objDataProviderLastMonth,
+    		]
+    	);
     }
 }
