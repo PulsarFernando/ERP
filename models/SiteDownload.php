@@ -57,7 +57,7 @@ class SiteDownload extends \yii\db\ActiveRecord
             'BOO_DOWNLOAD_SITE' => 'Download pelo site',
         ];
     }
-    public function getIntFkErpPrice()
+    public function getErpPrice()
     {
         return $this->hasOne(ErpPrice::className(), ['INT_PK_ID_ERP_PRICE' => 'INT_FK_ERP_PRICE_ID']);
     }

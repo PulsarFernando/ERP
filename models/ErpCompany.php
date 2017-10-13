@@ -57,4 +57,12 @@ class ErpCompany extends \yii\db\ActiveRecord
     			'STR_SOCIAL_REASON'
     	);
     }
+    public function getErpCompanyWithDistinctSocialReason()
+    {
+    	return ArrayHelper::map(
+    			ErpCompany::find()->asArray()->all(),
+    			'INT_PK_ID_ERP_COMPANY',
+    			'STR_SOCIAL_REASON'
+    			);
+    }
 }

@@ -14,6 +14,7 @@ class SiteUserSearch extends SiteUser
 	public $INT_TOTAL_INVOICED;
 	public $INT_TOTAL_DOWNLOAD;
 	public $STR_USER_TYPE_NAME_PT;
+//	public $
     public function rules()
     {
         return [
@@ -95,7 +96,9 @@ class SiteUserSearch extends SiteUser
     		->where(['between', SiteDownload::tableName().'.TST_CREATION_DATE',  $datDateStart, $datDateFinish])
     		->groupBy('INT_PK_ID_SITE_USER');
     	if($arrParam['intUserId'])
+    	{
     		$query->andWhere(['INT_PK_ID_SITE_USER' => $arrParam['intUserId']]);
+    	}
    		if($arrParam['intIdErpTypeFile'])
     		$query->join('INNER JOIN', SiteFile::tableName(), SiteFile::tableName().'.INT_PK_ID_SITE_FILE = '.SiteDownload::tableName().'.INT_FK_ID_SITE_FILE AND '.SiteFile::tableName().'.INT_FK_ERP_TYPE_FILE_ID = '.$arrParam['intIdErpTypeFile']);
     	$dataProvider = new ActiveDataProvider([

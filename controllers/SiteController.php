@@ -18,6 +18,7 @@ use app\models\ErpCity;
 use app\models\SiteQuoteSentSearch;
 use app\models\SiteQuoteSent;
 use app\components\SystemComponent;
+use app\models\SiteDownloadSearch;
 class SiteController extends Controller
 {
     public function actionFtp()
@@ -348,6 +349,20 @@ class SiteController extends Controller
     			'objSiteUserSearch' => $objSiteUserSearch,
     			'objDataProviderThisMonth' => $objDataProviderThisMonth,
     			'objDataProviderLastMonth' => $objDataProviderLastMonth,
+    		]
+    	);
+    }
+    public function actionDownloadReportCustomer()
+    {
+    	$objSiteUserSearch = new SiteUserSearch();
+    	$objSiteDownloadSearch = new SiteDownloadSearch();
+    	$objDataProviderByCustomer = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'));
+    	$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams);
+    	return $this->render('downloadReportCustomer', [
+    			'objSiteUserSearch' => $objSiteUserSearch,
+    			'objDataProviderByCustomer' => $objDataProviderByCustomer,
+    			'objSiteDownloadSearch' => $objSiteDownloadSearch,
+    			'objDataProviderDownloadByCustomer' => $objDataProviderDownloadByCustomer,
     		]
     	);
     }

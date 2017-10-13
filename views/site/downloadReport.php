@@ -10,7 +10,6 @@ use kartik\select2\Select2;
 use app\models\SiteUserSearch;
 use app\models\ErpTypeFile;
 use kartik\form\ActiveForm;
-use app\models\SiteUser;
 $this->title = 'Relatório de download';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 ?>
@@ -98,26 +97,35 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 		GridView::widget([
 			'id' => 'ActualMonth',
 	        'dataProvider' => $objDataProviderThisMonth,
-			'filterModel' => $objSiteUserSearch,	
 	        'columns' => [
 	        	[
 	        		'attribute' => 'STR_NAME',
 	        		'format' => 'raw',
 	        		'value' => function($objSiteUserSearch, $key, $index, $widget)
 	        		{
-	        			return $objSiteUserSearch->STR_NAME . '-' . $objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID;
+	        			return Html::a($objSiteUserSearch->STR_NAME, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
 	        		},
 	        	],
 	        	[
 	        		'attribute'	=> 'STR_USER_TYPE_NAME_PT',
 	        		'format' => 'raw',
-	        		'value' => 'siteUserType.STR_USER_TYPE_NAME_PT',
+	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			if($objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID == 1)
+	        				$booSpecialCustomer = 1;
+	        			else
+	        				$booSpecialCustomer = 0;
+	        			return Html::a($objSiteUserSearch->siteUserType->STR_USER_TYPE_NAME_PT, ['site/download-report-customer?booSpecialCustomer='.$booSpecialCustomer.'&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        		},
 	        		'label' => 'Tipo de cliente',
 	        	],
 	        	[
 	        		'attribute' => 'STR_SOCIAL_REASON',
 	        		'format' => 'raw',
-	        		'value' => 	'erpCompany.STR_SOCIAL_REASON',
+	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			return Html::a($objSiteUserSearch->erpCompany->STR_SOCIAL_REASON, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        		},
 	        		'label' => 'Empresa',
 	        	],	
  	        	[
@@ -148,7 +156,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 			'hover'=>true,
 			'panel' =>
 			[
-				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Relatório de downloads: mês atual</h3>',
+				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Relatório de downloads do período selecionado</h3>',
 				'type'=>'primary',
 			],
 			'toolbar'=>
@@ -176,18 +184,32 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        	[
 	        		'attribute' => 'STR_NAME',
 	        		'format' => 'raw',
-	        		'value' => 'STR_NAME',
+	        		'value' => function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			return Html::a($objSiteUserSearch->STR_NAME, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStartLastMonth').'&datDateFinish='.Yii::$app->session->get('datDateFinishLastMonth').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        		},
 	        	],
 	        	[
 	        		'attribute'	=> 'STR_USER_TYPE_NAME_PT',
 	        		'format' => 'raw',
 	        		'value' => 'siteUserType.STR_USER_TYPE_NAME_PT',
+	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			if($objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID == 1)
+	        				$booSpecialCustomer = 1;
+	        			else
+	        				$booSpecialCustomer = 0;
+	        			return Html::a($objSiteUserSearch->siteUserType->STR_USER_TYPE_NAME_PT, ['site/download-report-customer?booSpecialCustomer='.$booSpecialCustomer.'&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStartLastMonth').'&datDateFinish='.Yii::$app->session->get('datDateFinishLastMonth').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        		},
 	        		'label' => 'Tipo de cliente'
 	        	],
 	        	[
 	        		'attribute' => 'STR_SOCIAL_REASON',
 	        		'format' => 'raw',
-	        		'value' => 	'erpCompany.STR_SOCIAL_REASON',
+	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			return Html::a($objSiteUserSearch->erpCompany->STR_SOCIAL_REASON, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStartLastMonth').'&datDateFinish='.Yii::$app->session->get('datDateFinishLastMonth').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        		},
 	        		'label' => 'Empresa',
 	        	],
  	        	[
@@ -218,7 +240,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 			'hover'=>true,
 			'panel' =>
 			[
-				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Relatório de downloads: Mês anterior</h3>',
+				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Relatório de downloads do mês passado</h3>',
 				'type'=>'primary',
 			],
 			'toolbar'=>
