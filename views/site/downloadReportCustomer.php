@@ -1,19 +1,17 @@
 <?php
 use yii\helpers\Html;
-use kartik\form\ActiveForm;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\SiteDownload;
 use kartik\select2\Select2;
-use app\models\ErpCompany;
 use app\models\ErpCustomer;
 use app\models\ErpAuthor;
+use app\models\ErpPrice;
+use yii\base\Widget;
+use app\models\SiteDownloadSearch;
 $this->title = 'Cliente';
 $this->params['breadcrumbs'][] = ['label' =>'Relatório de download', 'url' => ['site/download-report-customer']];
 $this->params['breadcrumbs'][] = ['label' => $this->title];
-// echo '<pre>';
-// print_r(Yii::$app->request->get());
-// echo '</pre>';
 ?>
 <div class="site-download-index">
 	<?php Pjax::begin(); ?>    
@@ -86,7 +84,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	 	        	{
 	 	        		return Yii::$app->formatter->asdate(Yii::$app->session->get('datDateStart'), 'dd/MM/yyyy').' até '.Yii::$app->formatter->asdate(Yii::$app->session->get('datDateFinish'), 'dd/MM/yyyy');
 	 	        	},
-	 	        	'label' => 'Período do relatório',
+	 	        	'label' => 'Período',
 	 	        	'headerOptions' => [
 	 	        			'style' => 'width:200px'
 	 	        	],
@@ -103,6 +101,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 			[
 				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Informações gerais</h3>',
 				'type'=>'primary',
+				'footer' => false,
 			],
 			'toolbar'=> false,
 			'striped'=>false,
@@ -110,40 +109,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	?>
 	<?php Pjax::end(); ?>
 </div>
-<div class='panel panel-primary'>
-	<div class='panel-heading'>
-		<h3 class='panel-title'>
-			<i class='glyphicon glyphicon-globe'>
-			</i>
-				Ações
-		</h3>
-		<div class='clearfix'></div>
-	</div>
-	<div class='kv-panel-before-custon'>
-		<div class='pull-left'>
-			<?php ActiveForm::begin(['method' => 'get']); ?>
-			<div class='btn-toolbar kv-grid-toolbar' role='toolbar'>
-				<div class='btn-group' id='button-submit-filter'>
-					<?= html::a(Html::button('Voltar', ['class'=>'btn btn-default']),['/site/download-report?datFrom='.Yii::$app->formatter->asDate(Yii::$app->request->get('datDateStart'),'dd/MM/yyyy').'&datTo='.Yii::$app->formatter->asDate(Yii::$app->request->get('datDateFinish'),'dd/MM/yyyy').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]); ?>
-				</div>	
-				<div class='btn-group' id='button-submit-filter'>
-					<?= html::a(Html::button('Faturar todas', ['class'=>'btn btn-danger']),['#']); ?>
-				</div>
-				<div class='btn-group' id='button-submit-filter'>
-					<?= html::a(Html::button('Faturar selecionadas', ['class'=>'btn btn-danger']),['#']); ?>
-				</div>
-				<div class='btn-group' id='button-submit-filter'>
-					<?= html::a(Html::button('Imprimir', ['class'=>'btn btn-primary']),['#']); ?>
-				</div>
-				<div class='btn-group' id='button-submit-filter'>
-					<?= html::a(Html::button('Exportar para excel', ['class'=>'btn btn-warning']),['#']); ?>
-				</div>
-			</div>
-			<?php ActiveForm::end(); ?>
-		</div>
-		<div class='clearfix'></div>
-	</div>
-</div> 
 <div class="site-download-index">
 	<?php Pjax::begin(); ?>    
 	<?= 
@@ -152,6 +117,16 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        'dataProvider' => $objDataProviderDownloadByCustomer,
 	        'columns' => [
 	        	[
+	        		'class' => '\kartik\grid\CheckboxColumn',
+	        	],
+	        	[
+	        		'attribute' => 'STR_PROJECT_NAME',
+	        		'format' => 'raw',
+	        		'group' => true,
+	        		'value' => $objSiteDownloadSearch->STR_PROJECT_NAME,
+	        		'label' => 'Título',
+	        	],
+	        	[
 	        		'class' => 'kartik\grid\ExpandRowColumn',
 	        		'value' => function($objSiteDownloadSearch, $key, $index, $column)
 	        		{
@@ -159,37 +134,18 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        		},
 	        		'detail' => function($objSiteDownloadSearch, $key, $index, $column)
 	        		{
-	        			return Yii::$app->controller->renderPartial('test');
+	        			return Yii::$app->controller->renderPartial('downloadReportShowFileInformationCustomer',[
+	        				'objSiteDownloadSearch' => $objSiteDownloadSearch,	
+	        				'objAuthorName' => ErpAuthor::find()->select('STR_NAME_AUTHOR')->where(['INT_PK_ID_SITE_AUTHOR' => $objSiteDownloadSearch->siteFile->INT_FK_ERP_AUTHOR_ID])->one(),	
+	        			]);
 	        		},
 	        			
 	        	],
-// 	        	[
-// 	        		'attribute' => 'STR_FILE_CODE',
-// 	        		'format' => 'raw',
-// 	        		'value' => 'siteFile.STR_FILE_CODE',
-// 	        		'label' => 'Thumb',
-// 	        	],
 	        	[
 	        		'attribute' => 'STR_FILE_CODE',
 	        		'format' => 'raw',
 	        		'value' => 'siteFile.STR_FILE_CODE',
 	        		'label' => 'Código',
-	        	],
-	        	[
-	        		'attribute' => 'INT_FK_ERP_AUTHOR_ID',
-	        		'format' => 'raw',
-	        		'value' => function($objSiteDownloadSearch, $key, $index, $column)
-	        		{
-	        			$objAuthorName = ErpAuthor::find()->select('STR_NAME_AUTHOR')->where(['INT_PK_ID_SITE_AUTHOR' => $objSiteDownloadSearch->siteFile->INT_FK_ERP_AUTHOR_ID])->one();
-	        			return $objAuthorName->STR_NAME_AUTHOR;
-	        		},
-	        		'label' => 'Autor',
-	        	],
-	        	[
-	        		'attribute' => 'STR_MAIN_SUBJECT_PT',
-	        		'format' => 'raw',
-	        		'value' => 'siteFile.STR_MAIN_SUBJECT_PT',
-	        		'label' => 'Assunto',
 	        	],
 	        	[
 	        		'attribute' => 'STR_NAME',
@@ -213,21 +169,23 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        		'label' => 'FTP',
 	        	],
 	        	[
-	        		'attribute' => 'STR_PROJECT_NAME',
-	        		'format' => 'raw',
-	        		'value' => $objSiteDownloadSearch->STR_PROJECT_NAME,
-	        		'label' => 'Título',
-	        	],
-	        	[
 	        		'attribute' => 'INT_FK_ERP_PRICE_ID',
 	        		'format' => 'raw',
-	        		'value' => $objSiteDownloadSearch->INT_FK_ERP_PRICE_ID,
+	        		'value' => function($objSiteDownloadSearch, $key, $index, $column)
+	        		{
+	        			$objErpPrice = ErpPrice::find()->joinWith('erpUtilization')->where(['INT_PK_ID_ERP_PRICE' => $objSiteDownloadSearch->INT_FK_ERP_PRICE_ID])->one();
+	        			return $objErpPrice->erpUtilization->STR_UTILIZATION_PT;
+	        		},
 	        		'label' => 'Utilização',
 	        	],
 	        	[
 	        		'attribute' => 'INT_FK_ERP_PRICE_ID',
 	        		'format' => 'raw',
-	        		'value' => $objSiteDownloadSearch->INT_FK_ERP_PRICE_ID,
+	        		'value' => function($objSiteDownloadSearch, $key, $index, $column)
+	        		{
+	        			$objErpPrice = ErpPrice::find()->joinWith('erpDescription')->where(['INT_PK_ID_ERP_PRICE' => $objSiteDownloadSearch->INT_FK_ERP_PRICE_ID])->one();
+	        			return $objErpPrice->erpDescription->STR_DESCRIPTION_PT;
+	        		},
 	        		'label' => 'Tamanho',	
 	        	],
 	        	[
@@ -252,15 +210,49 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 			[
 				'heading'=>'<h3 class="panel-title"><i class="glyphicon glyphicon-globe"></i> '.'Relatório detalhado</h3>',
 				'type'=>'primary',
+				'footer' => false,
 			],
 			'toolbar'=>
 			[
 				[
 					'content'=>
+					Html::a('Voltar', ['/site/download-report?datFrom='.Yii::$app->formatter->asDate(Yii::$app->request->get('datDateStart'),'dd/MM/yyyy').'&datTo='.Yii::$app->formatter->asDate(Yii::$app->request->get('datDateFinish'),'dd/MM/yyyy').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')], ['class'=>'btn btn-default', 'title'=>'Voltar'])
+				],
+				[
+					'content'=>
+					Html::a('Faturar todas', ['#'], ['class'=>'btn btn-danger', 'title'=>'Faturar todas'])
+				],
+				[
+					'content'=>
+					Html::a('Faturar selecionadas', ['#'], ['data-pjax'=>0, 'class'=>'btn btn-danger', 'title'=>'Faturar selecionadas'])
+				],
+				[
+					'content'=>
+					Html::a('Imprimir', ['#'], ['class'=>'btn btn-primary', 'title'=>'Imprimir'])
+				],
+				[
+					'content'=>
+					Select2::widget([
+							'name' => 'filter-title',
+							'data' => SiteDownloadSearch::getTitleByCustomer(Yii::$app->request->get(),Yii::$app->request->get('booSpecialCustomer'), $arrIdsSpecialUser),
+							'id' => 'filter-title',
+							'options' => [
+									'placeholder' => 'Filtrar por titulo',
+							],
+							'pluginOptions' => [
+									'width' => '500px',
+							]
+					])
+				],
+				[
+					'content'=>
 						Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['site/user'], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Atualizar'])
 				],
+				[
+					'content'=>
+					Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['site/user'], ['data-pjax'=>0, 'class'=>'btn btn-default', 'title'=>'Atualizar'])
+				],
 				'{export}',
-				'{toggleData}',
 			],
 			'striped'=>false,
 	    ]); 

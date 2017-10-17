@@ -357,12 +357,26 @@ class SiteController extends Controller
     	$objSiteUserSearch = new SiteUserSearch();
     	$objSiteDownloadSearch = new SiteDownloadSearch();
     	$objDataProviderByCustomer = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'));
-    	$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams);
+    	if(Yii::$app->request->get('booSpecialCustomer') == 1)
+    	{	
+    		$intIdSpecialUserPrefix = $objSiteUserSearch->getIdSpecialUserPrefix(Yii::$app->request->get('intUserId'));
+    		foreach ($objSiteUserSearch->getAllIdsBySameIdPrefix($intIdSpecialUserPrefix) as $objRes)
+    		{
+    			$arrIdsSpecialUser[$objRes->INT_PK_ID_SITE_USER] = $objRes->INT_PK_ID_SITE_USER;
+    		}
+    		$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams, true, $arrIdsSpecialUser);
+    	}
+    	else
+    	{	
+    		$arrIdsSpecialUser = 0;
+    		$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams, true);
+    	}
     	return $this->render('downloadReportCustomer', [
     			'objSiteUserSearch' => $objSiteUserSearch,
     			'objDataProviderByCustomer' => $objDataProviderByCustomer,
     			'objSiteDownloadSearch' => $objSiteDownloadSearch,
     			'objDataProviderDownloadByCustomer' => $objDataProviderDownloadByCustomer,
+    			'arrIdsSpecialUser' => $arrIdsSpecialUser,
     		]
     	);
     }

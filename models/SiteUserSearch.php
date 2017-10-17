@@ -14,7 +14,6 @@ class SiteUserSearch extends SiteUser
 	public $INT_TOTAL_INVOICED;
 	public $INT_TOTAL_DOWNLOAD;
 	public $STR_USER_TYPE_NAME_PT;
-//	public $
     public function rules()
     {
         return [
@@ -183,5 +182,14 @@ class SiteUserSearch extends SiteUser
     			'INT_PK_ID_SITE_USER',
     			'STR_NAME'
     			);
+    }
+    public function getIdSpecialUserPrefix($intIdUser)
+    {
+    	$objCustormer = SiteUser::find()->where(['INT_PK_ID_SITE_USER' => $intIdUser])->one();
+    	return $objCustormer->INT_FK_SITE_SPECIAL_USER_PREFIX_ID; 
+    }
+    public function getAllIdsBySameIdPrefix($intIdPrefix)
+    {
+    	return SiteUser::find()->where(['INT_FK_SITE_SPECIAL_USER_PREFIX_ID' => $intIdPrefix])->All();
     }
 }

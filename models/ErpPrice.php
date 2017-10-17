@@ -45,27 +45,27 @@ class ErpPrice extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ErpLicenseFile::className(), ['INT_FK_ERP_PRICE_ID' => 'INT_PK_ID_ERP_PRICE']);
     }
-    public function getIntFkErpDescription()
+    public function getErpDescription()
     {
         return $this->hasOne(ErpDescription::className(), ['INT_PK_ID_ERP_DESCRIPTION' => 'INT_FK_ERP_DESCRIPTION_ID']);
     }
-    public function getIntFkErpFormat()
+    public function getErpFormat()
     {
         return $this->hasOne(ErpFormat::className(), ['INT_PK_ID_ERP_FORMAT' => 'INT_FK_ERP_FORMAT_ID']);
     }
-    public function getIntFkErpDistribution()
+    public function getErpDistribution()
     {
         return $this->hasOne(ErpDistribution::className(), ['INT_PK_ID_ERP_DISTRIBUTION' => 'INT_FK_ERP_DISTRIBUTION_ID']);
     }
-    public function getIntFkErpPeriodicity()
+    public function getErpPeriodicity()
     {
         return $this->hasOne(ErpPeriodicity::className(), ['INT_PK_ID_ERP_PERIODICITY' => 'INT_FK_ERP_PERIODICITY_ID']);
     }
-    public function getIntFkErpUtilization()
+    public function getErpUtilization()
     {
         return $this->hasOne(ErpUtilization::className(), ['INT_PK_ID_ERP_UTILIZATION' => 'INT_FK_ERP_UTILIZATION_ID']);
     }
-    public function getIntFkErpProjectType()
+    public function getErpProjectType()
     {
         return $this->hasOne(ErpProjectType::className(), ['INT_PK_ID_PROJECT_TYPE' => 'INT_FK_ERP_PROJECT_TYPE_ID']);
     }

@@ -61,4 +61,13 @@ class SystemComponent extends Component
 		$arrDate = explode('/',$strDate);
 		Return $arrDate[2].'-'.$arrDate[1].'-'.$arrDate[0];
 	}
+	public function getDataSiteFile($strString)
+	{
+		if($strString != '')
+		{
+			return substr($strString, 4,6).'/'.substr($strString, 0,4);
+		}
+		else 
+			return 'N/A';
+	}
 }

@@ -20,13 +20,34 @@ class SiteDownloadSearch extends SiteDownload
     {
         return Model::scenarios();
     }
-    public function search($params)
+    public function search($params, $booCuston = false, $arrIdUser = [])
     {
+    	if($booCuston)
+    	{
+    		$booPagination = false;
+    		$mixOrderBy = SiteDownload::tableName().'.STR_PROJECT_NAME';
+    	}
+    	else
+    	{
+    		$booPagination = true;
+    		$mixOrderBy = false;
+    	}
     	$query = SiteDownload::find()->joinWith('siteFile');
     	if(isset($params['intUserId']))
-    		$query->where(['INT_FK_ID_SITE_USER' => $params['intUserId']]);
+    	{
+    		if(count($arrIdUser))
+    			$query->where(['INT_FK_ID_SITE_USER' => $arrIdUser]);
+    		else 
+    			$query->where(['INT_FK_ID_SITE_USER' => $params['intUserId']]);
+    	}
+    		
+    	if($params['datDateStart'] && $params['datDateFinish'])
+    		$query->andWhere(['between',SiteDownload::tableName().'.TST_CREATION_DATE', $params['datDateStart'], $params['datDateFinish']]);
+    	if($mixGroupBy)
+    		$query->orderBy($mixOrderBy);
     	$dataProvider = new ActiveDataProvider([
     			'query' => $query,
+    			'pagination' => $booPagination,
     	]);
     	$dataProvider->sort->attributes['STR_FILE_CODE'] = [
     			'asc' => [SiteFile::tableName().'.STR_FILE_CODE' => SORT_ASC],
@@ -69,5 +90,12 @@ class SiteDownloadSearch extends SiteDownload
     		->andFilterWhere(['like', SiteFile::tableName().'.STR_MAIN_SUBJECT_PT', $this->STR_MAIN_SUBJECT_PT])
     	;
     	return $dataProvider;
+    }
+    public function getTitleByCustomer($arrParams, $booSpecialCustomer, $arrIdsSpecialUser)
+    {
+    	if($booSpecialCustomer == 0)
+    		return SiteDownload::find()->select('STR_PROJECT_NAME')->where(['INT_FK_ID_SITE_USER' => $arrParams['intUserId']])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
+    	else
+    		return SiteDownload::find()->select('STR_PROJECT_NAME')->where(['INT_FK_ID_SITE_USER' => $arrIdsSpecialUser])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
     }
 }
