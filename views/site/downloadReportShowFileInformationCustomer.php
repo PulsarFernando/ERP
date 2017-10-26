@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Html;
 use app\components\ErpGlobal;
+use app\components\SystemComponent;
 ?>
 <div class='container-picture-information'>
 	<div class='container-picture'>

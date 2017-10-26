@@ -236,3 +236,12 @@
 {
 	display: inline-block;
 }
+#container-form-edit-title, #container-form-abort-title, #container-form-save-title
+{
+	display: none;
+}
+#form-edit-title
+{    
+	height: 34px;
+    width: 700px;
+}

@@ -55,7 +55,7 @@ class ErpCustomer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ErpContact::className(), ['INT_FK_ERP_CUSTOMER_ID' => 'INT_PK_ID_ERP_CUSTOMER']);
     }
-    public function getIntFkCustomerErpCity()
+    public function getCustomerErpCity()
     {
         return $this->hasOne(ErpCity::className(), ['INT_PK_ID_ERP_CITY' => 'INT_FK_CUSTOMER_ERP_CITY_ID']);
     }
@@ -94,5 +94,9 @@ class ErpCustomer extends \yii\db\ActiveRecord
     		'INT_PK_ID_ERP_CUSTOMER',
    			'erpCompany.STR_SOCIAL_REASON'
     	);
+    }
+    public function getErpCustomerById($intIdCustomer)
+    {
+    	return ErpCustomer::find()->where(['INT_PK_ID_ERP_CUSTOMER' => $intIdCustomer])->one();
     }
 }

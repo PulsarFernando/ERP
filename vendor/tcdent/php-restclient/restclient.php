@@ -3,7 +3,7 @@
 /**
  * PHP REST Client
  * https://github.com/tcdent/php-restclient
- * (c) 2013-2016 Travis Dent <tcdent@gmail.com>
+ * (c) 2013-2017 Travis Dent <tcdent@gmail.com>
  */
 
 class RestClientException extends Exception {}
@@ -28,7 +28,8 @@ class RestClient implements Iterator, ArrayAccess {
             'headers' => [], 
             'parameters' => [], 
             'curl_options' => [], 
-            'user_agent' => "PHP RestClient/0.1.5", 
+            'build_indexed_queries' => FALSE, 
+            'user_agent' => "PHP RestClient/0.1.7", 
             'base_url' => NULL, 
             'format' => NULL, 
             'format_regex' => "/(\w+)\/(\w+)(;[.+])?/",
@@ -116,8 +117,16 @@ class RestClient implements Iterator, ArrayAccess {
         return $this->execute($url, 'PUT', $parameters, $headers);
     }
     
+    public function patch($url, $parameters=[], $headers=[]){
+        return $this->execute($url, 'PATCH', $parameters, $headers);
+    }
+    
     public function delete($url, $parameters=[], $headers=[]){
         return $this->execute($url, 'DELETE', $parameters, $headers);
+    }
+    
+    public function head($url, $parameters=[], $headers=[]){
+        return $this->execute($url, 'HEAD', $parameters, $headers);
     }
     
     public function execute($url, $method='GET', $parameters=[], $headers=[]){
@@ -152,7 +161,14 @@ class RestClient implements Iterator, ArrayAccess {
         // merged with parameters specified in the default options.
         if(is_array($parameters)){
             $parameters = array_merge($client->options['parameters'], $parameters);
-            $parameters_string = $client->format_query($parameters);
+            $parameters_string = http_build_query($parameters);
+            
+            // http_build_query automatically adds an array index to repeated
+            // parameters which is not desirable on most systems. This hack
+            // reverts "key[0]=foo&key[1]=bar" to "key[]=foo&key[]=bar"
+            if(!$client->options['build_indexed_queries'])
+                $parameters_string = preg_replace(
+                    "/%5B[0-9]+%5D=/simU", "%5B%5D=", $parameters_string);
         }
         else
             $parameters_string = (string) $parameters;
@@ -191,17 +207,6 @@ class RestClient implements Iterator, ArrayAccess {
         
         curl_close($client->handle);
         return $client;
-    }
-    
-    public function format_query($parameters, $primary='=', $secondary='&'){
-        $query = "";
-        foreach($parameters as $key => $values){
-            foreach(is_array($values)? $values : [$values] as $value){
-                $pair = [urlencode($key), urlencode($value)];
-                $query .= implode($primary, $pair) . $secondary;
-            }
-        }
-        return rtrim($query, $secondary);
     }
     
     public function parse_response($response){

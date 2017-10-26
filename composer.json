@@ -29,7 +29,8 @@
         "wbraganca/yii2-dynamicform": "*",
         "kartik-v/yii2-krajee-base": "dev-master",
         "kartik-v/yii2-dialog": "*",
-        "2amigos/yii2-ckeditor-widget": "^2.1"
+        "2amigos/yii2-ckeditor-widget": "^2.1",
+        "kartik-v/yii2-export": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -42,7 +43,7 @@
     },
     "config": {
         "process-timeout": 1800
-    },
+	},
     "scripts": {
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"
@@ -54,7 +55,7 @@
                 {
                     "runtime": "0777",
                     "web/assets": "0777",
-                    "yii": "0755"
+                    "yii": "0777"
                 }
             ],
             "generateCookieValidationKey": [

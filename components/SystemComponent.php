@@ -70,4 +70,17 @@ class SystemComponent extends Component
 		else 
 			return 'N/A';
 	}
+	public function getDropdownValue($arrDropdown, $strKeyValue, $strTextValue)
+	{
+		try 
+		{
+			foreach ($arrDropdown as $arrValue)
+				$arrReturn[trim($arrValue[$strTextValue])] = trim($arrValue[$strTextValue]);
+			return $arrReturn;
+		}
+		catch (\Exception $e)
+		{
+			return [];
+		}
+	}
 }

@@ -1,7 +1,7 @@
 PHP REST Client
 ===============
 https://github.com/tcdent/php-restclient  
-(c) 2013-2016 Travis Dent <tcdent@gmail.com>  
+(c) 2013-2017 Travis Dent <tcdent@gmail.com>  
 
 Installation
 -----------
@@ -31,6 +31,7 @@ Configurable Options
 `headers` - An associative array of HTTP headers and values to be included in every request.  
 `parameters` - An associative array of URL or body parameters to be included in every request.  
 `curl_options` - cURL options to apply to every request; anything defined here: https://secure.php.net/manual/en/function.curl-setopt.php. These will override any automatically generated values.  
+`build_indexed_queries` `(bool)` - `http_build_query` automatically adds an array index to repeated parameters which is not desirable on most systems. Use this option to enable the default behavior. Defaults to `FALSE`.
 `user_agent` - User agent string to use in requests.  
 `base_url` - URL to use for the base of each request.  
 `format` - Format string is appended to resource on request (extension), and used to determine which decoder to use on response; a request URL like "api.twitter.com/1.1/statuses/user_timeline.json" would be expected to return well-formed JSON.  
@@ -113,6 +114,7 @@ $api = new RestClient([
     'format' => "php"
 ]);
 $result = $api->get("tcdent/info");
+// GET http://vimeo.com/api/v2/tcdent/info.php
 foreach($result as $key => $value)
     var_dump($value);
 ```
@@ -232,38 +234,6 @@ $result = $api->execute("http://httpbin.org/patch", 'PATCH',
         'X-HTTP-Method-Override' => 'PATCH', 
         'Content-Type' => 'application/json-patch+json']);
 ```
-
-Note that your specific endpoint may not require the `X-HTTP-Method-Override` header, nor understand the [correct](http://tools.ietf.org/html/rfc6902#section-6) `application/json-patch+json` content type. 
-
-`POST JSON` content with correct content type:
-
-``` php
-$result = $api->post("http://httpbin.org/post",
-    json_encode(['foo' => 'bar']),
-    ['Content-Type' => 'application/json']);
-```
-
-
-Not all endpoints support all HTTP verbs
-----------------------------------------
-These are examples of two common workarounds, but are entirely dependent on the endpoint you are accessing. Consult the service's documentation to see if this is required. 
-
-Passing an `X-HTTP-Method-Override` header:
-
-``` php
-$result = $api->post("/", [], [
-    'X-HTTP-Method-Override' => "PUT"
-]);
-```
-
-Passing a `_method` parameter: 
-
-``` php
-$result = $api->post("/", [
-    '_method' => "PUT"
-]);
-```
-
 
 Tests
 -----

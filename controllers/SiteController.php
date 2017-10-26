@@ -19,6 +19,7 @@ use app\models\SiteQuoteSentSearch;
 use app\models\SiteQuoteSent;
 use app\components\SystemComponent;
 use app\models\SiteDownloadSearch;
+use app\models\ErpCustomer;
 class SiteController extends Controller
 {
     public function actionFtp()
@@ -356,20 +357,19 @@ class SiteController extends Controller
     {
     	$objSiteUserSearch = new SiteUserSearch();
     	$objSiteDownloadSearch = new SiteDownloadSearch();
-    	$objDataProviderByCustomer = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'));
     	if(Yii::$app->request->get('booSpecialCustomer') == 1)
     	{	
     		$intIdSpecialUserPrefix = $objSiteUserSearch->getIdSpecialUserPrefix(Yii::$app->request->get('intUserId'));
     		foreach ($objSiteUserSearch->getAllIdsBySameIdPrefix($intIdSpecialUserPrefix) as $objRes)
-    		{
     			$arrIdsSpecialUser[$objRes->INT_PK_ID_SITE_USER] = $objRes->INT_PK_ID_SITE_USER;
-    		}
     		$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams, true, $arrIdsSpecialUser);
+    		$objDataProviderByCustomer = $objSiteUserSearch->searchDownloadReportForSpecialCustomer(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'), $arrIdsSpecialUser);
     	}
     	else
     	{	
     		$arrIdsSpecialUser = 0;
     		$objDataProviderDownloadByCustomer = $objSiteDownloadSearch->search(Yii::$app->request->queryParams, true);
+    		$objDataProviderByCustomer = $objSiteUserSearch->searchDownloadReport(Yii::$app->request->queryParams, Yii::$app->session->get('datDateStart'),Yii::$app->session->get('datDateFinish'));
     	}
     	return $this->render('downloadReportCustomer', [
     			'objSiteUserSearch' => $objSiteUserSearch,
@@ -379,5 +379,55 @@ class SiteController extends Controller
     			'arrIdsSpecialUser' => $arrIdsSpecialUser,
     		]
     	);
+    }
+    public function actionChangeIdCompanyAndIdCustomer()
+    {
+    	$objSiteUser = new SiteUser();
+    	$objErpCustomer = new ErpCustomer();
+    	$objErpCustomerResult = $objErpCustomer->getErpCustomerById(Yii::$app->request->post('intIdCustomer'));
+    	$objCustomerIdAndCompany = SiteUser::findOne(['INT_PK_ID_SITE_USER' => Yii::$app->request->post('intUserId')]);
+    	$objCustomerIdAndCompany->INT_FK_ERP_CUSTOMER_ID = $objErpCustomerResult->INT_PK_ID_ERP_CUSTOMER;
+    	$objCustomerIdAndCompany->INT_FK_ERP_COMPANY_ID = $objErpCustomerResult->INT_FK_ERP_COMPANY_ID;
+    	if($objCustomerIdAndCompany->update() !== false)
+    		return true;
+    	else 
+    		return false;
+    }
+    public function actionChangeDownloadTitleByStringIds()
+    {
+    	try 
+    	{
+    		$arrIdDownload = explode(',', Yii::$app->request->post('strIdDownload'));
+    		foreach ($arrIdDownload as $arrId)
+    		{
+    			$objEditTitleSiteDownload = SiteDownload::findOne(['INT_PK_ID_SITE_DOWNLOAD' => $arrId]);
+    			$objEditTitleSiteDownload->STR_PROJECT_NAME = Yii::$app->request->post('strTitle');  
+    			$objEditTitleSiteDownload->update(false);
+     		}
+     		$this->redirect(Yii::$app->request->post('strRedirect'));
+    	}
+    	catch (Exception $e)
+    	{
+    		return 'Não foi possível alterar os titulos selecionados';	
+    	}
+    	$this->redirect(Yii::$app->request->post('strRedirect'));
+    }
+    public function actionChangeInvoiceDownload()
+    {
+    	try
+    	{
+    		$arrIdDownload = explode(',', Yii::$app->request->post('strIdDownload'));
+    		foreach ($arrIdDownload as $arrId)
+    		{
+    			$objEditTitleSiteDownload = SiteDownload::findOne(['INT_PK_ID_SITE_DOWNLOAD' => $arrId]);
+    			$objEditTitleSiteDownload->BOO_INVOICE = 1;
+    			$objEditTitleSiteDownload->update(false);
+    		}
+			$this->redirect('/administrative/license?booSearch=0&strIdDownload='.Yii::$app->request->post('strIdDownload'));
+    	}
+    	catch (Exception $e)
+    	{
+    		return 'Não foi possível alterar o status para faturodo dos itens selecionados';
+    	}
     }
 }

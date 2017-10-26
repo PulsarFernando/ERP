@@ -10,6 +10,7 @@ use kartik\select2\Select2;
 use app\models\SiteUserSearch;
 use app\models\ErpTypeFile;
 use kartik\form\ActiveForm;
+use app\models\SiteDownloadSearch;
 $this->title = 'Relatório de download';
 $this->params['breadcrumbs'][] = ['label' => $this->title];
 ?>
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 			<?php ActiveForm::begin(['method' => 'get']); ?>
 			<div class='btn-toolbar kv-grid-toolbar' role='toolbar'>
 				<div class='btn-group'>
-					<label class='control-label'>Peíodo: </label>
+					<label class='control-label'>Período: </label>
 					<?=
 						DatePicker::widget([
 							'name' => 'datFrom',
@@ -109,7 +110,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        	[
 	        		'attribute'	=> 'STR_USER_TYPE_NAME_PT',
 	        		'format' => 'raw',
-	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
+	        		'value' => function($objSiteUserSearch, $key, $index, $widget)
 	        		{
 	        			if($objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID == 1)
 	        				$booSpecialCustomer = 1;
@@ -120,29 +121,41 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        		'label' => 'Tipo de cliente',
 	        	],
 	        	[
+		        	'attribute'	=> 'STR_SPECIAL_USER_PREFIX',
+		        	'format' => 'raw',
+		        	'value' => function($objSiteUserSearch, $key, $index, $widget)
+	        		{
+	        			if($objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID == 1)
+	        				return Html::a($objSiteUserSearch->siteSpecialUserPrefix->STR_SPECIAL_USER_PREFIX, ['site/download-report-customer?booSpecialCustomer=1&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+	        			else
+	        				return '';
+	        		},	
+		        	'label' => 'Prefixo C.E',
+	        	],
+	        	[
 	        		'attribute' => 'STR_SOCIAL_REASON',
 	        		'format' => 'raw',
 	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
 	        		{
 	        			return Html::a($objSiteUserSearch->erpCompany->STR_SOCIAL_REASON, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
 	        		},
-	        		'label' => 'Empresa',
+	        		'label' => 'Empresa (Cadastro)',
 	        	],	
  	        	[
  	        		'attribute' => 'INT_PK_ID_SITE_USER',
  	        		'format' => 'raw',
  	        		'value' => 	function ($objSiteUserSearch, $key, $index, $widget)
  	        		{ 
- 	        			return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $objSiteUserSearch->INT_PK_ID_SITE_USER])->andWhere(['between','TST_CREATION_DATE',Yii::$app->session->get('datDateStart').'%',Yii::$app->session->get('datDateFinish').'%'])->count();
+	        			return SiteDownloadSearch::getCountDownloadByPeriodAndUserIdOrTypeFile(Yii::$app->session->get('datDateStart'), Yii::$app->session->get('datDateFinish'), $objSiteUserSearch->INT_PK_ID_SITE_USER, Yii::$app->request->get('intIdErpTypeFile'));
  	        		},
- 	        		'label' => 'Downloads',
+ 	        		'label' => 'Downloads'.(Yii::$app->request->get('intIdErpTypeFile') < 1 ? '' : (Yii::$app->request->get('intIdErpTypeFile') == 1 ? ' de foto' : ' de vídeo') ),
  	        	],
  	        	[
  	        		'attribute' => 'INT_PK_ID_SITE_USER',
  	        		'format' => 'raw',
  	        		'value' => 	function ($objSiteUserSearch, $key, $index, $widget)
  	        		{ 
- 	        			return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $objSiteUserSearch->INT_PK_ID_SITE_USER])->andWhere(['between','TST_CREATION_DATE',Yii::$app->session->get('datDateStart').'%',Yii::$app->session->get('datDateFinish').'%'])->andWhere(['BOO_INVOICE' => 1])->count();
+ 	        			return SiteDownloadSearch::getCountDownloadByPeriodAndUserIdAndInvoiceOrTypeFile(Yii::$app->session->get('datDateStart'), Yii::$app->session->get('datDateFinish'), $objSiteUserSearch->INT_PK_ID_SITE_USER, 1, Yii::$app->request->get('intIdErpTypeFile'));
  	        		},
  	        		'label' => 'Faturados',
  	        	],
@@ -204,29 +217,41 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        		'label' => 'Tipo de cliente'
 	        	],
 	        	[
+	        	'attribute'	=> 'STR_SPECIAL_USER_PREFIX',
+		        	'format' => 'raw',
+		        	'value' => function($objSiteUserSearch, $key, $index, $widget)
+		        	{
+		        		if($objSiteUserSearch->INT_FK_SITE_TYPE_USER_ID == 1)
+		        			return Html::a($objSiteUserSearch->siteSpecialUserPrefix->STR_SPECIAL_USER_PREFIX, ['site/download-report-customer?booSpecialCustomer=1&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
+		        			else
+		        				return '';
+	        	},
+	        	'label' => 'Prefixo C.E',
+	        	],
+	        	[
 	        		'attribute' => 'STR_SOCIAL_REASON',
 	        		'format' => 'raw',
 	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
 	        		{
 	        			return Html::a($objSiteUserSearch->erpCompany->STR_SOCIAL_REASON, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStartLastMonth').'&datDateFinish='.Yii::$app->session->get('datDateFinishLastMonth').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);
 	        		},
-	        		'label' => 'Empresa',
+	        		'label' => 'Empresa (Cadastro)',
 	        	],
  	        	[
  	        		'attribute' => 'INT_PK_ID_SITE_USER',
  	        		'format' => 'raw',
  	        		'value' => 	function ($objSiteUserSearch, $key, $index, $widget)
  	        		{ 
- 	        			return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $objSiteUserSearch->INT_PK_ID_SITE_USER])->andWhere(['between','TST_CREATION_DATE',Yii::$app->session->get('datDateStartLastMonth').'%',Yii::$app->session->get('datDateFinishLastMonth').'%'])->count('INT_FK_ID_SITE_USER');
- 	        		},
- 	        		'label' => 'Downloads',
+ 	        			return SiteDownloadSearch::getCountDownloadByPeriodAndUserIdOrTypeFile(Yii::$app->session->get('datDateStartLastMonth'), Yii::$app->session->get('datDateFinishLastMonth'), $objSiteUserSearch->INT_PK_ID_SITE_USER);
+	        		},
+ 	        		'label' => 'Downloads'.(Yii::$app->request->get('intIdErpTypeFile') < 1 ? '' : (Yii::$app->request->get('intIdErpTypeFile') == 1 ? ' de foto' : ' de vídeo') ),
  	        	],
  	        	[
  	        		'attribute' => 'INT_PK_ID_SITE_USER',
  	        		'format' => 'raw',
  	        		'value' => 	function ($objSiteUserSearch, $key, $index, $widget)
  	        		{ 
- 	        			return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $objSiteUserSearch->INT_PK_ID_SITE_USER])->andWhere(['between','TST_CREATION_DATE',Yii::$app->session->get('datDateStartLastMonth').'%',Yii::$app->session->get('datDateFinishLastMonth').'%'])->andWhere(['BOO_INVOICE' => 1])->count('INT_FK_ID_SITE_USER');
+ 	        			return SiteDownloadSearch::getCountDownloadByPeriodAndUserIdAndInvoiceOrTypeFile(Yii::$app->session->get('datDateStartLastMonth'), Yii::$app->session->get('datDateFinishLastMonth'), $objSiteUserSearch->INT_PK_ID_SITE_USER, 1);
  	        		},
  	        		'label' => 'Faturados',
  	        	],

@@ -3,17 +3,20 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\SiteDownload;
+use app\models\SiteFile;
 class SiteDownloadSearch extends SiteDownload
 {
 	public $STR_NAME;
 	public $STR_FILE_CODE;
 	public $INT_FK_ERP_AUTHOR_ID;
 	public $STR_MAIN_SUBJECT_PT;
+	public $INT_FILE_DATE;
+	public $INT_FK_SITE_IMAGE_RIGHT_ID;
     public function rules()
     {
         return [
-            [['INT_PK_ID_SITE_DOWNLOAD', 'INT_FK_ID_SITE_USER', 'INT_FK_ID_SITE_FILE', 'BOO_INVOICE', 'INT_FK_ERP_PRICE_ID', 'BOO_DOWNLOAD_SITE', 'INT_FK_ERP_AUTHOR_ID'], 'integer'],
-            [['TST_CREATION_DATE', 'STR_IP', 'STR_NAME', 'STR_NOTE', 'STR_PROJECT_NAME', 'STR_FORMAT', 'STR_CIRCULATION', 'STR_IMPRESSION', 'STR_NAME', 'STR_FILE_CODE', 'INT_FK_ERP_AUTHOR_ID', 'STR_MAIN_SUBJECT_PT'], 'safe'],
+            [['INT_PK_ID_SITE_DOWNLOAD', 'INT_FK_ID_SITE_USER', 'INT_FK_ID_SITE_FILE', 'BOO_INVOICE', 'INT_FK_ERP_PRICE_ID', 'BOO_DOWNLOAD_SITE', 'INT_FK_ERP_AUTHOR_ID','INT_FILE_DATE','INT_FK_SITE_IMAGE_RIGHT_ID'], 'integer'],
+            [['TST_CREATION_DATE', 'STR_IP', 'STR_NAME', 'STR_NOTE', 'STR_PROJECT_NAME', 'STR_FORMAT', 'STR_CIRCULATION', 'STR_IMPRESSION', 'STR_NAME', 'STR_FILE_CODE', 'INT_FK_ERP_AUTHOR_ID', 'STR_MAIN_SUBJECT_PT','INT_FILE_DATE','INT_FK_SITE_IMAGE_RIGHT_ID'], 'safe'],
         ];
     }
     public function scenarios()
@@ -40,9 +43,17 @@ class SiteDownloadSearch extends SiteDownload
     		else 
     			$query->where(['INT_FK_ID_SITE_USER' => $params['intUserId']]);
     	}
-    		
     	if($params['datDateStart'] && $params['datDateFinish'])
     		$query->andWhere(['between',SiteDownload::tableName().'.TST_CREATION_DATE', $params['datDateStart'], $params['datDateFinish']]);
+    	if(isset($params['strProjectName']))
+    	{
+    		if($params['strProjectName'] != '')
+    			$query->andWhere(['like', 'STR_PROJECT_NAME', $params['strProjectName']]);
+    	}
+    	if($params['intIdErpTypeFile'])
+    	{
+    		$query->andWhere(['INT_FK_ERP_TYPE_FILE_ID' => $params['intIdErpTypeFile']]);
+    	}
     	if($mixGroupBy)
     		$query->orderBy($mixOrderBy);
     	$dataProvider = new ActiveDataProvider([
@@ -61,6 +72,14 @@ class SiteDownloadSearch extends SiteDownload
     			'asc' => [SiteFile::tableName().'.STR_MAIN_SUBJECT_PT' => SORT_ASC],
     			'desc' => [SiteFile::tableName().'.STR_MAIN_SUBJECT_PT' => SORT_DESC],
     	];
+    	$dataProvider->sort->attributes['INT_FILE_DATE'] = [
+    			'asc' => [SiteFile::tableName().'.INT_FILE_DATE' => SORT_ASC],
+    			'desc' => [SiteFile::tableName().'.INT_FILE_DATE' => SORT_DESC],
+    	];
+    	$dataProvider->sort->attributes['INT_FK_SITE_IMAGE_RIGHT_ID'] = [
+    			'asc' => [SiteFile::tableName().'.INT_FK_SITE_IMAGE_RIGHT_ID' => SORT_ASC],
+    			'desc' => [SiteFile::tableName().'.INT_FK_SITE_IMAGE_RIGHT_ID' => SORT_DESC],
+    	];
     	$this->load($params);
     	if (!$this->validate()) 
     	{
@@ -76,7 +95,9 @@ class SiteDownloadSearch extends SiteDownload
     		'BOO_DOWNLOAD_SITE' => $this->BOO_DOWNLOAD_SITE,
     		'STR_FILE_CODE' => $this->STR_FILE_CODE,	
     		'INT_FK_ERP_AUTHOR_ID' => $this->INT_FK_ERP_AUTHOR_ID,	
-    		'STR_MAIN_SUBJECT_PT' => $this->STR_MAIN_SUBJECT_PT	
+    		'STR_MAIN_SUBJECT_PT' => $this->STR_MAIN_SUBJECT_PT,	
+    		'INT_FILE_DATE' => $this->INT_FILE_DATE,
+    		'INT_FK_SITE_IMAGE_RIGHT_ID' => $this->INT_FK_SITE_IMAGE_RIGHT_ID,
     	]);
     	$query->andFilterWhere(['like', 'STR_IP', $this->STR_IP])
 	    	->andFilterWhere(['like', 'STR_NAME', $this->STR_NAME])
@@ -88,14 +109,30 @@ class SiteDownloadSearch extends SiteDownload
     		->andFilterWhere(['like', SiteFile::tableName().'.STR_FILE_CODE', $this->STR_FILE_CODE])
     		->andFilterWhere(['like', SiteFile::tableName().'.INT_FK_ERP_AUTHOR_ID', $this->INT_FK_ERP_AUTHOR_ID])
     		->andFilterWhere(['like', SiteFile::tableName().'.STR_MAIN_SUBJECT_PT', $this->STR_MAIN_SUBJECT_PT])
+    		->andFilterWhere(['like', SiteFile::tableName().'.INT_FILE_DATE', $this->INT_FILE_DATE])
+    		->andFilterWhere(['like', SiteFile::tableName().'.INT_FK_SITE_IMAGE_RIGHT_ID', $this->INT_FK_SITE_IMAGE_RIGHT_ID])
     	;
     	return $dataProvider;
     }
     public function getTitleByCustomer($arrParams, $booSpecialCustomer, $arrIdsSpecialUser)
     {
     	if($booSpecialCustomer == 0)
-    		return SiteDownload::find()->select('STR_PROJECT_NAME')->where(['INT_FK_ID_SITE_USER' => $arrParams['intUserId']])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
+    		return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $arrParams['intUserId']])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
     	else
-    		return SiteDownload::find()->select('STR_PROJECT_NAME')->where(['INT_FK_ID_SITE_USER' => $arrIdsSpecialUser])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
+    		return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $arrIdsSpecialUser])->andWhere(['between','TST_CREATION_DATE', $arrParams['datDateStart'], $arrParams['datDateFinish']])->asArray()->all();
+    }
+    public function getCountDownloadByPeriodAndUserIdOrTypeFile($datDateStart, $datDateFinish, $intIdUser, $intTypeFile = 0)
+    {
+    	if($intTypeFile)
+    		return SiteDownload::find()->joinWith('siteFile')->where(['INT_FK_ID_SITE_USER' => $intIdUser, SiteFile::tableName().'.INT_FK_ERP_TYPE_FILE_ID' => $intTypeFile])->andWhere(['between',SiteDownload::tableName().'.TST_CREATION_DATE',$datDateStart.'%',$datDateFinish.'%'])->count('INT_FK_ID_SITE_USER');
+    	else
+    		return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $intIdUser])->andWhere(['between','TST_CREATION_DATE',$datDateStart.'%',$datDateFinish.'%'])->count('INT_FK_ID_SITE_USER');
+    }
+    public function getCountDownloadByPeriodAndUserIdAndInvoiceOrTypeFile($datDateStart, $datDateFinish, $intIdUser, $intInvoice, $intTypeFile = 0)
+    {
+    	if($intTypeFile)
+    		return SiteDownload::find()->joinWith('siteFile')->where(['INT_FK_ID_SITE_USER' => $intIdUser, SiteFile::tableName().'.INT_FK_ERP_TYPE_FILE_ID' => $intTypeFile, 'BOO_INVOICE' => $intInvoice])->andWhere(['between',SiteDownload::tableName().'.TST_CREATION_DATE',$datDateStart.'%',$datDateFinish.'%'])->count('INT_FK_ID_SITE_USER');
+    	else
+    		return SiteDownload::find()->where(['INT_FK_ID_SITE_USER' => $intIdUser, 'BOO_INVOICE' => $intInvoice])->andWhere(['between','TST_CREATION_DATE',$datDateStart.'%',$datDateFinish.'%'])->count('INT_FK_ID_SITE_USER');
     }
 }

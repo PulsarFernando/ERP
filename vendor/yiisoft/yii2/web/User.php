@@ -237,7 +237,7 @@ class User extends Component
      */
     public function login(IdentityInterface $identity, $duration = 0)
     {
-    	if ($this->beforeLogin($identity, false, $duration)) {
+        if ($this->beforeLogin($identity, false, $duration)) {
             $this->switchIdentity($identity, $duration);
             $id = $identity->getId();
             $ip = Yii::$app->getRequest()->getUserIP();
