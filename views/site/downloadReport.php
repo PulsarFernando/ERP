@@ -134,7 +134,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
 	        	],
 	        	[
 	        		'attribute' => 'STR_SOCIAL_REASON',
-	        		'format' => 'raw',
+	        		'format' => 'raw',	
 	        		'value' => 	 function($objSiteUserSearch, $key, $index, $widget)
 	        		{
 	        			return Html::a($objSiteUserSearch->erpCompany->STR_SOCIAL_REASON, ['site/download-report-customer?booSpecialCustomer=0&intUserId='.$objSiteUserSearch->INT_PK_ID_SITE_USER.'&datDateStart='.Yii::$app->session->get('datDateStart').'&datDateFinish='.Yii::$app->session->get('datDateFinish').'&intIdErpTypeFile='.Yii::$app->request->get('intIdErpTypeFile').'&sort='.Yii::$app->request->get('sort').'&page='.Yii::$app->request->get('page')]);

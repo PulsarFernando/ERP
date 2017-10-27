@@ -103,6 +103,17 @@ $this->registerJs(
 				alert('Selecione ao menos um item para iniciar a fatura');
 			return false;
 		});
+		$(document).on('change', '.form-control', function(){
+			$.post(
+				'change-price-download',
+				{
+					intIdDownload: $(this).attr('download-id'), intIdPrice: $(this).val(), strRedirect: '".URL::CURRENT()."'
+				},
+				function(data){
+					alert(data);
+				}
+			);
+		});
 	"
 );
 ?>
@@ -344,9 +355,12 @@ $this->registerJs(
 	        				'data' => ErpPriceSearch::getPriceUtilization(),
 	        				'value' => $objSiteDownloadSearch->INT_FK_ERP_PRICE_ID,
 	        				'id' => 'id-price-utilization-'.$objSiteDownloadSearch->INT_PK_ID_SITE_DOWNLOAD,
+	        				'options' => [
+	        					'download-id' => $objSiteDownloadSearch->INT_PK_ID_SITE_DOWNLOAD,
+	        				],	
 	        				'pluginOptions' => [
 	        					'allowClear' => true,
-	        					'width' => '100%',
+	        					'width' => '300px',
 	        				],
 	        			]);
 	        		},

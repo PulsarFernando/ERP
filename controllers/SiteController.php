@@ -388,7 +388,7 @@ class SiteController extends Controller
     	$objCustomerIdAndCompany = SiteUser::findOne(['INT_PK_ID_SITE_USER' => Yii::$app->request->post('intUserId')]);
     	$objCustomerIdAndCompany->INT_FK_ERP_CUSTOMER_ID = $objErpCustomerResult->INT_PK_ID_ERP_CUSTOMER;
     	$objCustomerIdAndCompany->INT_FK_ERP_COMPANY_ID = $objErpCustomerResult->INT_FK_ERP_COMPANY_ID;
-    	if($objCustomerIdAndCompany->update() !== false)
+    	if($objCustomerIdAndCompany->update(false) !== false)
     		return true;
     	else 
     		return false;
@@ -428,6 +428,20 @@ class SiteController extends Controller
     	catch (Exception $e)
     	{
     		return 'Não foi possível alterar o status para faturodo dos itens selecionados';
+    	}
+    }
+    public function actionChangePriceDownload()
+    {
+    	try 
+    	{
+    		$objEditPriceSiteDownload = SiteDownload::findOne(['INT_PK_ID_SITE_DOWNLOAD' => Yii::$app->request->post('intIdDownload')]);
+    		$objEditPriceSiteDownload->INT_FK_ERP_PRICE_ID = Yii::$app->request->post('intIdPrice');
+    		if($objEditPriceSiteDownload->update(false) !== false)
+    			$this->redirect(Yii::$app->request->post('strRedirect'));
+    	}
+    	catch (Exception $e)
+    	{
+    		return 'Não foi possível realizar a alteração na utilização';
     	}
     }
 }

@@ -60,9 +60,24 @@ class ErpPriceSearch extends ErpPrice
     public function getPriceUtilization()
     {
     	return ArrayHelper::map(
-    		ErpPrice::find()->joinWith(['erpDescription','erpFormat','erpDistribution','erpPeriodicity','erpUtilization','erpProjectType'])->asArray()->all(),
+    		ErpPrice::find()
+     			->select([
+     					'INT_PK_ID_ERP_PRICE',
+     					"CONCAT(
+			    			CONCAT(INT_PK_ID_ERP_PRICE, ' | '),
+			    			IF(STR_UTILIZATION_PT IS NULL, '', CONCAT(STR_UTILIZATION_PT,' | ')),
+			    			IF(STR_FORMAT_PT IS NULL, '', CONCAT(STR_FORMAT_PT,' | ')),
+			    			IF(STR_DISTRIBUTION_PT IS NULL, '', CONCAT(STR_DISTRIBUTION_PT,' | ')),
+			    			IF(STR_PERIODICITY_PT IS NULL, '', CONCAT(STR_PERIODICITY_PT,' | ')),
+			    			IF(STR_DESCRIPTION_PT IS NULL, '', CONCAT(STR_DESCRIPTION_PT,' | '))
+			    			) 
+     					AS ST"
+     			])
+    			->joinWith(['erpDescription','erpFormat','erpDistribution','erpPeriodicity','erpUtilization','erpProjectType'])
+    			->asArray()
+    		->all(),
     		'INT_PK_ID_ERP_PRICE',
-    		'erpUtilization.STR_UTILIZATION_PT'
+    		'ST'
     	);
     }
 }

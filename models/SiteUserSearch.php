@@ -106,7 +106,7 @@ class SiteUserSearch extends SiteUser
    		}
     	$dataProvider = new ActiveDataProvider([
     		'query' => $query,
-    		'sort'=> ['defaultOrder' => ['STR_SOCIAL_REASON'=>SORT_DESC, 'STR_NAME' => SORT_DESC]],
+    		'sort'=> ['defaultOrder' => ['STR_SOCIAL_REASON'=>SORT_DESC, 'STR_NAME' => SORT_ASC]],
     	]);
     	$dataProvider->sort->attributes['STR_SOCIAL_REASON'] = [
     			'asc' => [ErpCompany::tableName().'.STR_SOCIAL_REASON' => SORT_ASC],
