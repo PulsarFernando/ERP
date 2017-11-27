@@ -117,5 +117,6 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
         	'{toggleData}',
         ],
         'striped'=>false,
-    ]); ?>
+    ]); 
+?>
 <?php Pjax::end(); ?>

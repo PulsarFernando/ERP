@@ -30,7 +30,11 @@
         "kartik-v/yii2-krajee-base": "dev-master",
         "kartik-v/yii2-dialog": "*",
         "2amigos/yii2-ckeditor-widget": "^2.1",
-        "kartik-v/yii2-export": "@dev"
+        "kartik-v/yii2-export": "@dev",
+        "budyaga/yii2-cropper": "*",
+        "demi/cropper": "~1.0",
+        "newerton/yii2-jcrop": "dev-master",
+        "sadovojav/yii2-image-thumbnail": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

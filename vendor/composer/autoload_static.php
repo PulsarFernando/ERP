@@ -20,6 +20,7 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         'y' => 
         array (
             'yii\\swiftmailer\\' => 16,
+            'yii\\imagine\\' => 12,
             'yii\\gii\\' => 8,
             'yii\\faker\\' => 10,
             'yii\\debug\\' => 10,
@@ -31,9 +32,17 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         array (
             'wbraganca\\dynamicform\\' => 22,
         ),
+        's' => 
+        array (
+            'sadovojav\\image\\' => 16,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'n' => 
+        array (
+            'newerton\\jcrop\\' => 15,
         ),
         'k' => 
         array (
@@ -73,10 +82,15 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         'd' => 
         array (
             'dosamigos\\ckeditor\\' => 19,
+            'demi\\cropper\\' => 13,
         ),
         'c' => 
         array (
             'cebe\\markdown\\' => 14,
+        ),
+        'b' => 
+        array (
+            'budyaga\\cropper\\' => 16,
         ),
         'W' => 
         array (
@@ -99,6 +113,10 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+        ),
+        'K' => 
+        array (
+            'Kinglozzer\\TinyPng\\' => 19,
         ),
         'G' => 
         array (
@@ -124,6 +142,10 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         'yii\\swiftmailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2-swiftmailer',
+        ),
+        'yii\\imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/yii2-imagine',
         ),
         'yii\\gii\\' => 
         array (
@@ -153,11 +175,19 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         array (
             0 => __DIR__ . '/..' . '/wbraganca/yii2-dynamicform',
         ),
+        'sadovojav\\image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sadovojav/yii2-image-thumbnail',
+        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+        ),
+        'newerton\\jcrop\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/newerton/yii2-jcrop',
         ),
         'kartik\\widgets\\' => 
         array (
@@ -291,9 +321,17 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         array (
             0 => __DIR__ . '/..' . '/2amigos/yii2-ckeditor-widget/src',
         ),
+        'demi\\cropper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/demi/cropper',
+        ),
         'cebe\\markdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/cebe/markdown',
+        ),
+        'budyaga\\cropper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/budyaga/yii2-cropper',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -347,6 +385,10 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'Kinglozzer\\TinyPng\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kinglozzer/tinypng/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -383,6 +425,13 @@ class ComposerStaticInit9f9e4e27e79990b4ee47bd62041b34f3
             'PHPExcel' => 
             array (
                 0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
+            ),
+        ),
+        'I' => 
+        array (
+            'Imagine' => 
+            array (
+                0 => __DIR__ . '/..' . '/imagine/imagine/lib',
             ),
         ),
         'H' => 

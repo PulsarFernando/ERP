@@ -147,7 +147,7 @@ class SiteFile extends ActiveRecord
     }
     public function getByIdFtpFileWithSiteFile($intIdSiteFile, $intIdTypeFile, $intIdSiteUser)
     {
-    	return $this->find()
+    	return SiteFile::find()
     		->select([
     			SiteFile::tableName().'.*',	
     			SiteFTPFile::tableName().'.*',
@@ -161,5 +161,13 @@ class SiteFile extends ActiveRecord
     				
     			])
     		->one();
+    }
+    public function getPictureByCode($strFileCode)
+    {
+    	return SiteFile::find()->where(['INT_FK_ERP_TYPE_FILE_ID' => '1' ])->andWhere(['STR_FILE_CODE'=>$strFileCode])->one();
+    }
+    public function getPictureById($intFileCode)
+    {
+    	return SiteFile::find()->where(['INT_FK_ERP_TYPE_FILE_ID' => '1' ])->andWhere(['INT_PK_ID_SITE_FILE'=>$intFileCode])->one();
     }
 }

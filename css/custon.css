@@ -3,7 +3,7 @@
    width: 100%;
 }
 .container .site-index .body-content .index .form-group, 
-.wrap .container .pulsar-ftp-file-form, .erp-user-form, .erp-role-form, .pulsar-customer-quotation-answer-form
+.wrap .container .pulsar-ftp-file-form, .erp-user-form, .erp-role-form, .pulsar-customer-quotation-answer-form, .pulsar-erp-customer-form
 {
 	max-width: 50%;
 	margin-left: 25%;
@@ -244,4 +244,22 @@
 {    
 	height: 34px;
     width: 700px;
+}
+.container-show-image-home
+{
+	width: 150px; 
+	height: 47px; 
+	overflow: hidden;
+}
+.show-image-home
+{
+	margin:-27px 0px -27px 0px;
+}
+#add-picture-home-code
+{
+	width: 250px;
+}
+.jcrop-buttons
+{
+	margin-top: 25px;
 }

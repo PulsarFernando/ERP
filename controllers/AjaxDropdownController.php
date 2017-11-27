@@ -13,6 +13,7 @@ use app\models\ErpDescription;
 use app\models\ErpState;
 use app\models\ErpCity;
 use yii\helpers\Json;
+use app\models\SiteFile;
 class AjaxDropdownController extends Controller
 {
 	public function actionGetProjectType()
@@ -179,8 +180,8 @@ class AjaxDropdownController extends Controller
 		$strParents = Yii::$app->request->post('depdrop_parents');
 		if ($strParents != null)
 		{
-			$intIdCountry = $strParents[0];
-			foreach (ErpCity::getErpCityByFkStateId($intIdCountry) as $intKey =>$strValue)
+			$intIdState = $strParents[0];
+			foreach (ErpCity::getErpCityByFkStateId($intIdState) as $intKey =>$strValue)
 				$arrReturn[$intKey] = ['id' => $intKey, 'name' => $strValue];
 			echo Json::encode(['output'=>$arrReturn, 'selected'=>'']);
 			return;

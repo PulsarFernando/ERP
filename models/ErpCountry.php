@@ -15,18 +15,20 @@ class ErpCountry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['STR_COUNTRY_PT', 'STR_COUNTRY_EN', 'STR_COUNTRY_ACRONYM'], 'required'],
+            [['STR_COUNTRY_PT', 'STR_COUNTRY_EN', 'STR_COUNTRY_ACRONYM', 'INT_DDI'], 'required'],
             [['STR_COUNTRY_PT', 'STR_COUNTRY_EN'], 'string', 'max' => 100],
             [['STR_COUNTRY_ACRONYM'], 'string', 'max' => 2],
+        	[['INT_DDI'], 'integer', 'max' => 3],	
         ];
     }
     public function attributeLabels()
     {
         return [
-            'INT_PK_ID_ERP_COUNTRY' => Yii::t('erpModel', 'Int  Pk  Id  Erp  Country'),
-            'STR_COUNTRY_PT' => Yii::t('erpModel', 'Str  Country  Pt'),
-            'STR_COUNTRY_EN' => Yii::t('erpModel', 'Str  Country  En'),
-            'STR_COUNTRY_ACRONYM' => Yii::t('erpModel', 'Str  Country  Acronym'),
+            'INT_PK_ID_ERP_COUNTRY' => Yii::t('erpModel', 'Código do pais'),
+            'STR_COUNTRY_PT' => Yii::t('erpModel', 'Pais'),
+            'STR_COUNTRY_EN' => Yii::t('erpModel', 'Coutry Name'),
+            'STR_COUNTRY_ACRONYM' => Yii::t('erpModel', 'Sigla do país'),
+        	'INT_DDI' => 'DDI'
         ];
     }
     public function getErpState()
@@ -40,5 +42,9 @@ class ErpCountry extends \yii\db\ActiveRecord
     		'INT_PK_ID_ERP_COUNTRY',
     		'STR_COUNTRY_PT'
     	);
+    }
+    public function getErpCountryByParam($arrParam)
+    {
+    	return ErpCountry::find()->where($arrParam)->one();
     }
 }

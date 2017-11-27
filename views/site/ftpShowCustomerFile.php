@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][1] = $this->title;
 				[
 					'attribute' => 'STR_FILE_CODE',	
 					'format' => 'raw',
-					'value' => 'intFkSiteFile.STR_FILE_CODE',
+					'value' => 'siteFile.STR_FILE_CODE',
 					'label' => 'Código do arquivo'	
 				],
 				[
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][1] = $this->title;
 				[
 					'attribute' => 'STR_USER_NAME',	
 					'format' => 'raw',
-					'value' => 'intFkErpUser.STR_USER_NAME',
+					'value' => 'erpUser.STR_USER_NAME',
 					'label' => 'Nome do colaborador',	
 				],
 				[

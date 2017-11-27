@@ -52,4 +52,8 @@ class ErpState extends \yii\db\ActiveRecord
     {
     	return ErpState::find()->where($arrParam)->one();
     }
+    public function getStateCountryByIdCity($intIdCity)
+    {
+    	return ErpState::find()->joinWith(['erpCity', 'erpCountry'])->where([ErpCity::tableName().'.INT_PK_ID_ERP_CITY' => $intIdCity])->one();
+    }
 }

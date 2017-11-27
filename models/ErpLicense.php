@@ -30,33 +30,33 @@ class ErpLicense extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'INT_PK_ID_ERP_LICENSE' => Yii::t('erpModel', 'Int  Pk  Id  Erp  License'),
-            'INT_FK_ERP_CUSTOMER_ID' => Yii::t('erpModel', 'Int  Fk  Erp  Customer  ID'),
-            'INT_FK_ERP_USER_ID' => Yii::t('erpModel', 'Int  Fk  Erp  User  ID'),
-            'INT_FK_ERP_COMPANY_ID' => Yii::t('erpModel', 'Int  Fk  Erp  Company  ID'),
-            'STR_DESCRIPTION' => Yii::t('erpModel', 'Str  Description'),
-            'STR_SOCIAL_REASON' => Yii::t('erpModel', 'Str  Social  Reason'),
-            'STR_FANTASY_NAME' => Yii::t('erpModel', 'Str  Fantasy  Name'),
-            'STR_STATE_REGISTRATION' => Yii::t('erpModel', 'Str  State  Registration'),
-            'STR_CNPJ' => Yii::t('erpModel', 'Str  Cnpj'),
-            'FLO_TOTAL_AMOUNT' => Yii::t('erpModel', 'Flo  Total  Amount'),
-            'DAT_CREATION_LICENSE' => Yii::t('erpModel', 'Dat  Creation  License'),
-            'DAT_PAYDAY' => Yii::t('erpModel', 'Dat  Payday'),
-            'TST_CREATION_DATE' => Yii::t('erpModel', 'Tst  Creation  Date'),
-            'STR_INVOICE' => Yii::t('erpModel', 'Str  Invoice'),
-            'BOO_COMPLETED' => Yii::t('erpModel', 'Boo  Completed'),
-            'BOO_CLOSED_INVOICE' => Yii::t('erpModel', 'ANTIGA BAIXADA'),
+            'INT_PK_ID_ERP_LICENSE' => 'Código da LR',
+            'INT_FK_ERP_CUSTOMER_ID' => 'Código cliente oficial',
+            'INT_FK_ERP_USER_ID' => 'Código cliente',
+            'INT_FK_ERP_COMPANY_ID' => 'Código da empresa',
+            'STR_DESCRIPTION' => 'Descrição',
+            'STR_SOCIAL_REASON' => 'Razão social',
+            'STR_FANTASY_NAME' => 'Nome fantasia',
+            'STR_STATE_REGISTRATION' => 'Inscrição estadual',
+            'STR_CNPJ' => 'CNPJ',
+            'FLO_TOTAL_AMOUNT' => 'Total',
+            'DAT_CREATION_LICENSE' => 'Data da LR',
+            'DAT_PAYDAY' => 'Data do pageamento',
+            'TST_CREATION_DATE' => 'Data do registro',
+            'STR_INVOICE' => 'Nota fiscal',
+            'BOO_COMPLETED' => 'Finalizado',
+            'BOO_CLOSED_INVOICE' => 'Faturado',
         ];
     }
-    public function getIntFkErpCustomer()
+    public function getErpCustomer()
     {
         return $this->hasOne(ErpCustomer::className(), ['INT_PK_ID_ERP_CUSTOMER' => 'INT_FK_ERP_CUSTOMER_ID']);
     }
-    public function getIntFkErpCompany()
+    public function getErpCompany()
     {
         return $this->hasOne(ErpCompany::className(), ['INT_PK_ID_ERP_COMPANY' => 'INT_FK_ERP_COMPANY_ID']);
     }
-    public function getIntFkErpUser()
+    public function getErpUser()
     {
         return $this->hasOne(ErpUser::className(), ['INT_PK_ID_ERP_USER' => 'INT_FK_ERP_USER_ID']);
     }

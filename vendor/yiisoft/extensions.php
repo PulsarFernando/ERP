@@ -327,4 +327,49 @@ return array (
       '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid',
     ),
   ),
+  'yiisoft/yii2-imagine' => 
+  array (
+    'name' => 'yiisoft/yii2-imagine',
+    'version' => '2.1.0.0',
+    'alias' => 
+    array (
+      '@yii/imagine' => $vendorDir . '/yiisoft/yii2-imagine',
+    ),
+  ),
+  'budyaga/yii2-cropper' => 
+  array (
+    'name' => 'budyaga/yii2-cropper',
+    'version' => '2.0.17.0',
+    'alias' => 
+    array (
+      '@budyaga/cropper' => $vendorDir . '/budyaga/yii2-cropper',
+    ),
+  ),
+  'demi/cropper' => 
+  array (
+    'name' => 'demi/cropper',
+    'version' => '1.1.2.0',
+    'alias' => 
+    array (
+      '@demi/cropper' => $vendorDir . '/demi/cropper',
+    ),
+  ),
+  'newerton/yii2-jcrop' => 
+  array (
+    'name' => 'newerton/yii2-jcrop',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@newerton/jcrop' => $vendorDir . '/newerton/yii2-jcrop',
+    ),
+  ),
+  'sadovojav/yii2-image-thumbnail' => 
+  array (
+    'name' => 'sadovojav/yii2-image-thumbnail',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@sadovojav/image' => $vendorDir . '/sadovojav/yii2-image-thumbnail',
+    ),
+  ),
 );

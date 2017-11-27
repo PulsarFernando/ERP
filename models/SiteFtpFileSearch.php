@@ -21,7 +21,7 @@ class SiteFtpFileSearch extends SiteFtpFile
     }
     public function search($params)
     {
-        $query = SiteFtpFile::find()->joinWith(['intFkErpUser'])->joinWith(['intFkSiteFile'])->orderBy('TST_CREATION_DATE');
+        $query = SiteFtpFile::find()->joinWith(['erpUser'])->joinWith(['siteFile'])->orderBy('TST_CREATION_DATE');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

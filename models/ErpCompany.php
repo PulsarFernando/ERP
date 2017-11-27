@@ -2,7 +2,8 @@
 namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
-class ErpCompany extends \yii\db\ActiveRecord
+use yii\db\ActiveRecord;
+class ErpCompany extends ActiveRecord
 {
     public static function tableName()
     {
@@ -16,7 +17,7 @@ class ErpCompany extends \yii\db\ActiveRecord
     {
         return [
             [['STR_CNPJ', 'STR_SOCIAL_REASON', 'STR_FANTASY_NAME'], 'required'],
-            [['INT_ID_TEMP'], 'integer'],
+            [['INT_ID_TEMP','STR_CNPJ'], 'integer'],
             [['STR_CNPJ'], 'string', 'max' => 14],
             [['STR_SOCIAL_REASON', 'STR_FANTASY_NAME'], 'string', 'max' => 100],
             [['STR_STATE_REGISTRATION'], 'string', 'max' => 20],
@@ -25,12 +26,12 @@ class ErpCompany extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'INT_PK_ID_ERP_COMPANY' => Yii::t('erpModel', 'Int  Pk  Id  Erp  Company'),
-            'STR_CNPJ' => Yii::t('erpModel', 'Str  Cnpj'),
-            'STR_SOCIAL_REASON' => Yii::t('erpModel', 'Str  Social  Reason'),
-            'STR_FANTASY_NAME' => Yii::t('erpModel', 'Str  Fantasy  Name'),
-            'STR_STATE_REGISTRATION' => Yii::t('erpModel', 'Str  State  Registration'),
-            'INT_ID_TEMP' => Yii::t('erpModel', 'Int  Id  Temp'),
+            'INT_PK_ID_ERP_COMPANY' => 'Código da empresa',
+            'STR_CNPJ' => 'CNPJ',
+            'STR_SOCIAL_REASON' => 'Razão social',
+            'STR_FANTASY_NAME' => 'Nome Fantasia',
+            'STR_STATE_REGISTRATION' => 'Inscrição estadual',
+            'INT_ID_TEMP' => 'Código temporário',
         ];
     }
     public function getErpAuthor()

@@ -55,6 +55,9 @@ $config = [
 		'erpGlobal' => [
 			'class' => 'app\components\ErpGlobal',	
 		],
+		'FileComponent' => [
+			'class' => 'app\components\FileComponent'	
+		],
 		'erpUserComponent' => [
 			'class' => 'app\components\ErpUserComponent',
 		],

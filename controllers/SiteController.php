@@ -20,6 +20,9 @@ use app\models\SiteQuoteSent;
 use app\components\SystemComponent;
 use app\models\SiteDownloadSearch;
 use app\models\ErpCustomer;
+use app\models\SiteHomePageFileSearch;
+use app\models\SiteHomePageFile;
+use app\components\FileComponent;
 class SiteController extends Controller
 {
     public function actionFtp()
@@ -443,5 +446,119 @@ class SiteController extends Controller
     	{
     		return 'Não foi possível realizar a alteração na utilização';
     	}
+    }
+    public function actionHomePage()
+    {
+    	$objSiteHomePageSearch = new SiteHomePageFileSearch();
+    	$objDataProvider = $objSiteHomePageSearch->search(Yii::$app->request->queryParams);
+    	return $this->render('homePage', [
+    			'objSiteHomePageSearch' => $objSiteHomePageSearch,
+    			'objDataProvider' => $objDataProvider,
+    	]);
+    }
+    public function actionHomePageVerifyCodeFile()
+    {
+    	$objSiteHomePageSearch = new SiteHomePageFileSearch();
+    	$objSiteFile = new SiteFile();
+    	if(trim(Yii::$app->request->post('strFileCode')) != '')
+    	{
+    		$objResultSiteFile = $objSiteFile->getPictureByCode(Yii::$app->request->post('strFileCode'));
+	    	if($objResultSiteFile->INT_PK_ID_SITE_FILE)
+	    	{
+	    		if($objResultSiteFile->INT_VERTICAL_SIZE > $objResultSiteFile->INT_HORIZANTAL_SIZE)
+	    			return 1;
+	    		else 
+	    		{
+	    			$objResultSiteHomePage = $objSiteHomePageSearch->getPictureByIdFile($objResultSiteFile->INT_PK_ID_SITE_FILE);		
+	    			if($objResultSiteHomePage->INT_PK_ID_SITE_HOMEPAGE_FILE)
+	    				$this->redirect('home-page-update?id='.$objResultSiteHomePage->INT_PK_ID_SITE_HOMEPAGE_FILE);
+	    			else 
+	    				$this->redirect('home-page-add?id='.$objResultSiteFile->INT_PK_ID_SITE_FILE.'&intIdAuthor='.$objResultSiteFile->INT_FK_ERP_AUTHOR_ID);
+	    		}
+	    	}
+	    	else 
+	    		return 0;
+    	}
+    	else
+    		return 2;
+    }
+    public function actionHomePageAdd($id)
+    {
+    	/**
+    	 * 
+    	 * @todo falta tudo, tomar como base a parte do update
+    	 * 
+    	 */
+    	$objSiteHomePageFile = new SiteHomePageFile();
+    	$objSiteHomePageFile->setAttribute('INT_FK_SITE_FILE_ID', $id);
+    	$objSiteHomePageFile->setAttribute('INT_FK_SITE_AUTHOR_ID', Yii::$app->request->get('intIdAuthor'));
+    	$objSiteHomePageFile->setAttribute('TST_CREATION_DATE', date('Y-m-d H:i:s'));
+    	if ($objSiteHomePageFile->load(Yii::$app->request->post()) && $objSiteHomePageFile->save())
+    		return $this->redirect(['home-page']);
+    	else 
+    	{
+    		return $this->render('homePageCreate', [
+    			'objSiteHomePageFile' => $objSiteHomePageFile,
+    		]);
+    	}
+    }
+    public function actionHomePageUpdate($id)
+    {
+    	
+    	/**
+    	 * 
+    	 * @todo file change //alterar o arquivo da pasta images/copieS3 para a pasta do site
+    	 * @todo apagar imagens residuais, tais como _resize, essa pasta copieS3 tem que estar vazia
+    	 * @todo fazer os testes no ambiente de homolog para ver se está ok 
+    	 */
+    	$objSiteHomePageFile = $this->findModelHomePage($id);
+    	$objSiteFile = new SiteFile();
+    	$objFileComponent = new FileComponent();
+    	$objResultSiteFile = $objSiteFile->getPictureById($objSiteHomePageFile->INT_FK_SITE_FILE_ID);
+    	if($objFileComponent->copyS3($objResultSiteFile->STR_FILE_CODE))    	
+		{
+			$objFileComponent->createThumbnail([
+				'strPathImage' => $objResultSiteFile->STR_FILE_CODE, 
+				'intHorizontaSize' => ($objResultSiteFile->INT_HORIZANTAL_SIZE/2), 
+				'intVerticalSize' => ($objResultSiteFile->INT_VERTICAL_SIZE/2), 
+				'strPathSave' => $objResultSiteFile->STR_FILE_CODE,
+			]);
+		}
+    	$objSiteHomePageFile->setAttribute('TST_CREATION_DATE', date('Y-m-d H:i:s'));
+    	if ($objSiteHomePageFile->load(Yii::$app->request->post()) && $objSiteHomePageFile->save()) 
+    	{
+    		$objFileComponent->cropImage([
+    				'strPathImage' => $objFileComponent->getCopyLocation().$objResultSiteFile->STR_FILE_CODE.'_resize'.$objFileComponent->getExtensionJpg(),
+    				'intHorizontaSize' => 1924,
+    				'intVerticalSize' => 530,
+    				'intHorizontaCropSize' => ( Yii::$app->request->post('imageId_x')*4),
+    				'intVerticalCropSize' => ( Yii::$app->request->post('imageId_y')*2),
+    				'strPathSave' => $objFileComponent->getCopyLocation().$objResultSiteFile->STR_FILE_CODE.$objFileComponent->getExtensionJpg()
+    		]);
+    		$this->redirect(['home-page']);
+    	}	
+    	else
+    	{
+    		return $this->render('homePageUpdate', [
+    			'objSiteHomePageFile' => $objSiteHomePageFile,
+    			'objSiteFile' => $objResultSiteFile,
+    			'objFileComponent' => $objFileComponent	
+    		]);
+    	}
+    }
+    public function actionHomePageDelete($id)
+    {
+    	/**
+    	 * @todo apagar da pasta imagens da home do site a imagem que lá está com o mesmo nome 
+    	 */
+    	$this->findModelHomePage($id)->delete();
+    	return $this->redirect(['home-page']);
+    }
+    protected function findModelHomePage($id)
+    {
+    	if (($objSiteHomePageFile = SiteHomePageFile::findOne($id)) !== null)
+    		return $objSiteHomePageFile;
+    	else
+    		throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

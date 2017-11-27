@@ -5,6 +5,8 @@ use yii\web\Controller;
 use app\models\ErpPrice;
 use app\components\SystemComponent;
 use app\models\SiteFile;
+use app\models\ErpCountry;
+use app\models\ErpCity;
 class AjaxReturnValueController extends Controller
 {
 	public function actionGetIdPrice()
@@ -23,8 +25,6 @@ class AjaxReturnValueController extends Controller
 			Yii::$app->request->post(),
 			NULL	
 		);
-// 		var_dump($objSystemComponet->getArrReturn());
-// 		die;
 		$objResultErpPrice = $objErpPrice->find()->where([
 			'INT_FK_ERP_DESCRIPTION_ID' 	=> $objSystemComponet->getArrReturn('intDescription'),
 			'INT_FK_ERP_PROJECT_TYPE_ID' 	=> $objSystemComponet->getArrReturn('intProjectType'),
@@ -34,8 +34,6 @@ class AjaxReturnValueController extends Controller
 			'INT_FK_ERP_PERIODICITY_ID' 	=> $objSystemComponet->getArrReturn('intPeriodicity'),
 			'BOO_STATUS' => 1,
 		])->one();
-// 		var_dump($objResultErpPrice);
-// 		die;
 		return $objResultErpPrice->INT_PK_ID_ERP_PRICE;
 	}
 	public function actionGetMutipleIdFileByStrCodeFile()
@@ -68,5 +66,17 @@ class AjaxReturnValueController extends Controller
 		echo '<pre>';
 		print_r(Yii::$app->request->post);
 		die;
+	}
+	public function actionGetDdi()
+	{
+		$objErpCountry = new ErpCountry();
+		$objReturn = $objErpCountry->getErpCountryByParam(['INT_PK_ID_ERP_COUNTRY' => Yii::$app->request->post(intId)]);
+		return $objReturn->INT_DDI;
+	}
+	public function actionGetDdd()
+	{
+		$objErpCity = new ErpCity();
+		$objReturn = $objErpCity->getErpCityByParam(['INT_PK_ID_ERP_CITY' => Yii::$app->request->post(intId)]);
+		return $objReturn->INT_DDD;
 	}
 }

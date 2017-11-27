@@ -36,15 +36,15 @@ class SiteFtpFile extends \yii\db\ActiveRecord
             'INT_FK_ERP_USER_ID' => 'Código do colaborador',
         ];
     }
-    public function getIntFkErpUser()
+    public function getErpUser()
     {
         return $this->hasOne(ErpUser::className(), ['INT_PK_ID_ERP_USER' => 'INT_FK_ERP_USER_ID']);
     }
-    public function getIntFkSiteFile()
+    public function getSiteFile()
     {
         return $this->hasOne(SiteFile::className(), ['INT_PK_ID_SITE_FILE' => 'INT_FK_SITE_FILE_ID']);
     }
-    public function getIntFkSiteUser()
+    public function getSiteUser()
     {
         return $this->hasOne(SiteUser::className(), ['INT_PK_ID_SITE_USER' => 'INT_FK_SITE_USER_ID']);
     }

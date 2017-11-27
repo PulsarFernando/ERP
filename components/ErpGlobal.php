@@ -5,7 +5,8 @@ use yii\base\Component;
 class ErpGlobal extends Component
 {
 	private $strPreviewImage = 'https://s3-sa-east-1.amazonaws.com/pulsar-media/fotos/previews/';
-	private $strExtensionJpg = '.jpg';
+	private $strImageHome = 'http://www.pulsarimagens.com.br/images/home/';
+	protected $strExtensionJpg = '.jpg';
 	public function init()
 	{
 		if(!Yii::$app->erpUserComponent->booSession())
@@ -18,8 +19,13 @@ class ErpGlobal extends Component
 	{
 		return $this->strPreviewImage.$strFileCode.'p';
 	}
+	public function getUrlImageHome($strFileCode)
+	{
+		return $this->strImageHome.$strFileCode;
+	}
 	public function getExtensionJpg()
 	{
 		return $this->strExtensionJpg;
 	}
+	
 }

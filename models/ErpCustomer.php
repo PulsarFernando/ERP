@@ -2,8 +2,10 @@
 namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
-class ErpCustomer extends \yii\db\ActiveRecord
+use yii\db\ActiveRecord;
+class ErpCustomer extends ActiveRecord
 {
+	const SCENARIO_ERP_CUSTOMER = 'ErpCustomerAdd';
     public static function tableName()
     {
         return 'ERP_CUSTOMER';
@@ -11,6 +13,12 @@ class ErpCustomer extends \yii\db\ActiveRecord
     public static function getDb()
     {
         return Yii::$app->get('dbPulsar');
+    }
+    public function scenarios()
+    {
+    	$scenarios = parent::scenarios();
+    	$scenarios[self::SCENARIO_ERP_CUSTOMER] = [];
+    	return $scenarios;
     }
     public function rules()
     {
@@ -27,10 +35,12 @@ class ErpCustomer extends \yii\db\ActiveRecord
             [['TST_CREATION_DATE'], 'string', 'max' => 20],
             [['INT_FK_CUSTOMER_ERP_CITY_ID'], 'exist', 'skipOnError' => true, 'targetClass' => ErpCity::className(), 'targetAttribute' => ['INT_FK_CUSTOMER_ERP_CITY_ID' => 'INT_PK_ID_ERP_CITY']],
             [['INT_FK_ERP_COMPANY_ID'], 'exist', 'skipOnError' => true, 'targetClass' => ErpCompany::className(), 'targetAttribute' => ['INT_FK_ERP_COMPANY_ID' => 'INT_PK_ID_ERP_COMPANY']],
+        	[['INT_FK_CUSTOMER_ERP_CITY_ID'], 'required', 'on' => self::SCENARIO_ERP_CUSTOMER],
         ];
     }
     public function attributeLabels()
     {
+    	
         return [
             'INT_PK_ID_ERP_CUSTOMER' => 'Código de Cliente no Erp',
             'INT_FK_CUSTOMER_ERP_CITY_ID' => 'cidade',
@@ -48,7 +58,12 @@ class ErpCustomer extends \yii\db\ActiveRecord
             'BOO_STATUS' => 'Status',
             'FLO_DISCOUNT_VALUE' => 'Valor de desconto',
             'FLO_DISCOUNT_PERCENTAGE' => 'Porcentagem de desconto',
-            'BOO_REGISTRATION_FLAG_BY_ERP' => 'Registro pelo site ou Erp',
+            'BOO_REGISTRATION_FLAG_BY_ERP' => 'Registrado pelo ERP',
+        //Company	
+        	'STR_SOCIAL_REASON' => 'Razão social',
+        	'STR_FANTASY_NAME' => 'Nome fantasia',
+        	'STR_CNPJ' => 'CNPJ',
+        	'STR_STATE_REGISTRATION' => 'Inscrição estadual'
         ];
     }
     public function getErpContact()
